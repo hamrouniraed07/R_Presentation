@@ -1,0 +1,239 @@
+---
+title: "Analyse des données de circoncision"
+author: "Raed Mohamed Amine Hamrouni"
+format:
+  html:
+    code-tools: true
+    code-fold: show
+    toc: true
+    toc-location: left
+    theme: cosmo
+    embed-resources: true
+    css: custom.css
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(forcats)
+library(knitr)
+
+# Charger les données
+data <- read.csv(
+  "liste_circoncision_anonymisee.csv",
+  sep = ",",
+  dec = ".",
+  stringsAsFactors = FALSE
+)
+
+# Nettoyer les données
+data <- data %>%
+  mutate(
+    Date = dmy(Date),
+    annee = year(Date),
+    age_jours = as.numeric(`age.en.jours`),
+    age_mois = as.numeric(`age.en.mois`),
+    age_annee = as.numeric(`age.en.année`),
+    operateur = `Opérateur`,
+    contexte = Contexte,
+    anesthesie = `Anesthésie`,
+    indication = `Indication.de.la.circoncision`
+  )
+```
+
+## Introduction
+
+Ce document présente l'analyse d'un fichier de données de circoncision.
+
+Le but est de:
+
+- décrire la population
+- décrire les pratiques
+- décrire les complications
+- explorer des facteurs associés
+
+## 1. Inspection des données
+
+### 1.1. Afficher les noms de colonnes
+
+```{r}
+names(data)
+```
+
+### 1.2. Aperçu des données
+
+```{r}
+head(data, 5)
+```
+
+### 1.3. Structure des données
+
+```{r}
+str(data)
+```
+
+## 2. Analyses descriptives
+
+### 2.1. Résumé statistique de l'âge
+
+```{r}
+data %>%
+  summarise(
+    n = n(),
+    age_median_jours = median(age_jours, na.rm = TRUE),
+    age_Q1_jours = quantile(age_jours, 0.25, na.rm = TRUE),
+    age_Q3_jours = quantile(age_jours, 0.75, na.rm = TRUE),
+    age_median_mois = median(age_mois, na.rm = TRUE)
+  ) %>%
+  kable()
+```
+
+### 2.2. Distribution de l'âge (en mois)
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+ggplot(data, aes(x = age_mois)) +
+  geom_histogram(bins = 30, fill = "#4a90e2", color = "white") +
+  labs(title = "Distribution de l'âge (en mois)", x = "Âge (mois)", y = "Effectif") +
+  theme_minimal()
+```
+
+## 3. Évolution temporelle
+
+### 3.1. Circoncisions par année
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+cas_par_annee <- data %>%
+  group_by(annee) %>%
+  summarise(n = n())
+
+ggplot(cas_par_annee, aes(x = annee, y = n)) +
+  geom_line(color = "#4a90e2", size = 1.5) +
+  geom_point(color = "#2c5aa0", size = 3) +
+  geom_text(aes(label = n), vjust = -0.5) +
+  labs(title = "Nombre de circoncisions par année", x = "Année", y = "Nombre de cas") +
+  theme_minimal()
+```
+
+## 4. Analyse par opérateur
+
+### 4.1. Tableau des opérateurs
+
+```{r}
+data %>%
+  count(operateur, sort = TRUE) %>%
+  mutate(pourcentage = round(100 * n / sum(n), 1)) %>%
+  head(10) %>%
+  kable()
+```
+
+### 4.2. Graphique par opérateur
+
+```{r}
+#| fig-width: 10
+#| fig-height: 8
+top_operateurs <- data %>%
+  count(operateur, sort = TRUE) %>%
+  head(15)
+
+data %>%
+  filter(operateur %in% top_operateurs$operateur) %>%
+  ggplot(aes(x = fct_infreq(operateur))) +
+  geom_bar(fill = "#e74c3c") +
+  coord_flip() +
+  labs(title = "Répartition par opérateur (Top 15)", x = "Opérateur", y = "Nombre") +
+  theme_minimal()
+```
+
+## 5. Analyse du contexte
+
+### 5.1. Répartition par contexte
+
+```{r}
+data %>%
+  count(contexte, sort = TRUE) %>%
+  mutate(pourcentage = round(100 * n / sum(n), 1)) %>%
+  kable()
+```
+
+### 5.2. Graphique par contexte
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+ggplot(data, aes(x = fct_infreq(contexte))) +
+  geom_bar(fill = "#16a085") +
+  geom_text(stat = "count", aes(label = after_stat(count)), vjust = -0.5) +
+  labs(title = "Répartition par contexte", x = "Contexte", y = "Nombre") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## 6. Analyse de l'anesthésie
+
+### 6.1. Types d'anesthésie utilisés
+
+```{r}
+data %>%
+  count(anesthesie, sort = TRUE) %>%
+  mutate(pourcentage = round(100 * n / sum(n), 1)) %>%
+  kable()
+```
+
+### 6.2. Graphique des types d'anesthésie
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+ggplot(data, aes(x = fct_infreq(anesthesie))) +
+  geom_bar(fill = "#27ae60") +
+  coord_flip() +
+  labs(title = "Types d'anesthésie", x = "Type", y = "Nombre") +
+  theme_minimal()
+```
+
+## 7. Indications de la circoncision
+
+### 7.1. Tableau des indications
+
+```{r}
+data %>%
+  count(indication, sort = TRUE) %>%
+  mutate(pourcentage = round(100 * n / sum(n), 1)) %>%
+  head(10) %>%
+  kable()
+```
+
+### 7.2. Graphique des indications
+
+```{r}
+#| fig-width: 12
+#| fig-height: 8
+top_indications <- data %>%
+  count(indication, sort = TRUE) %>%
+  head(10)
+
+data %>%
+  filter(indication %in% top_indications$indication) %>%
+  ggplot(aes(x = fct_infreq(indication))) +
+  geom_bar(fill = "#d35400") +
+  coord_flip() +
+  labs(title = "Top 10 des indications", x = "Indication", y = "Nombre") +
+  theme_minimal()
+```
+
+## 8. Conclusion
+
+Résumé:
+
+- **`r nrow(data)`** circoncisions au total
+- Période: **`r min(data$annee, na.rm=TRUE)`** à **`r max(data$annee, na.rm=TRUE)`**
+- Âge médian: **`r round(median(data$age_mois, na.rm=TRUE), 1)`** mois
