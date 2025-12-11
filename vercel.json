@@ -1,0 +1,15 @@
+{
+  "buildCommand": "quarto render analyse_circoncision.qmd --to html",
+  "outputDirectory": ".",
+  "cleanUrls": true,
+  "routes": [
+    {
+      "src": "/public",
+      "dest": "/"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/analyse_circoncision.html"
+    }
+  ]
+}
