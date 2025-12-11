@@ -1,0 +1,11 @@
+project:
+  type: website
+  output-dir: public
+
+format:
+  html:
+    theme: cosmo
+    css: custom.css
+    toc: true
+    toc-location: left
+    embed-resources: false
