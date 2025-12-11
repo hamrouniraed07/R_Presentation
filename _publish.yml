@@ -1,0 +1,4 @@
+- source: analyse_circoncision.qmd
+  quarto-pub:
+    - id: f89bdb27-015d-4001-b7ef-dc69bed36f11
+      url: https://raed.quarto.pub/analyse-des-données-de-circoncision
