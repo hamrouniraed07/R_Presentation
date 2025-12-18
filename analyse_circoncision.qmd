@@ -2,6 +2,7 @@
 title: "Analyse des données de circoncision"
 subtitle: "Étude descriptive et exploratoire"
 author: "Raed Mohamed Amine Hamrouni"
+date: today
 format:
   html:
     code-tools: true
@@ -161,14 +162,26 @@ cas_par_annee <- data %>%
   summarise(n = n())
 
 ggplot(cas_par_annee, aes(x = annee, y = n)) +
-  geom_line(color = "#4a90e2", size = 1.5) +
+  geom_line(color = "#4a90e2", linewidth = 1.5) +
   geom_point(color = "#2c5aa0", size = 3) +
-  geom_text(aes(label = n), vjust = -0.5, size = 3.5) +
-  geom_smooth(method = "loess", se = TRUE, color = "#e74c3c", linetype = "dashed") +
-  labs(title = "Nombre de circoncisions par année", 
-       x = "Année", y = "Nombre de cas") +
-  theme_minimal(base_size = 12) +
-  theme(panel.grid.minor = element_blank())
+  geom_text(aes(label = n), vjust = -0.6, size = 3.5) +
+  geom_smooth(method = "loess", se = FALSE,
+              color = "#e74c3c", linetype = "dashed") +
+  scale_y_continuous(
+    limits = c(0, 50),        
+    breaks = seq(0, 50, 5)    
+  ) +
+  labs(
+    title = "Tendance annuelle des circoncisions",
+    x = "Année",
+    y = "Nombre de cas"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
 ```
 
 **Analyse temporelle** :
