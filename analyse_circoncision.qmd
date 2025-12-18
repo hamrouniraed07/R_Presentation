@@ -2,7 +2,6 @@
 title: "Analyse des données de circoncision"
 subtitle: "Étude descriptive et exploratoire"
 author: "Raed Mohamed Amine Hamrouni"
-date: today
 format:
   html:
     code-tools: true
