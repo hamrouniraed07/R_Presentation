@@ -1,0 +1,380 @@
+[
+  {
+    "objectID": "analyse_circoncision.html",
+    "href": "analyse_circoncision.html",
+    "title": "Analyse des données de circoncision",
+    "section": "",
+    "text": "Ce document présente une analyse exhaustive d’un ensemble de données relatives aux interventions de circoncision. La circoncision est une procédure chirurgicale courante pratiquée pour des raisons culturelles, religieuses ou médicales. Cette analyse vise à fournir une compréhension approfondie des pratiques actuelles, des caractéristiques de la population concernée et des modalités opératoires.\n\n\n\nLes objectifs principaux de cette étude sont :\n\nDécrire la population : caractériser les patients selon l’âge et la période d’intervention\nAnalyser les pratiques opératoires : identifier les opérateurs, les contextes et les types d’anesthésie utilisés\nExaminer les indications : comprendre les raisons médicales et autres motivant les interventions\nExplorer les tendances temporelles : observer l’évolution du nombre d’interventions au fil des années\nIdentifier les facteurs associés : mettre en évidence les relations entre différentes variables\n\n\n\n\nL’analyse repose sur des méthodes statistiques descriptives et exploratoires utilisant le langage R et les packages suivants :\n\ndplyr pour la manipulation des données\nggplot2 pour les visualisations\nlubridate pour le traitement des dates\nforcats pour la gestion des variables catégorielles"
+  },
+  {
+    "objectID": "analyse_circoncision.html#contexte-de-létude",
+    "href": "analyse_circoncision.html#contexte-de-létude",
+    "title": "Analyse des données de circoncision",
+    "section": "",
+    "text": "Ce document présente une analyse exhaustive d’un ensemble de données relatives aux interventions de circoncision. La circoncision est une procédure chirurgicale courante pratiquée pour des raisons culturelles, religieuses ou médicales. Cette analyse vise à fournir une compréhension approfondie des pratiques actuelles, des caractéristiques de la population concernée et des modalités opératoires."
+  },
+  {
+    "objectID": "analyse_circoncision.html#objectifs-de-lanalyse",
+    "href": "analyse_circoncision.html#objectifs-de-lanalyse",
+    "title": "Analyse des données de circoncision",
+    "section": "",
+    "text": "Les objectifs principaux de cette étude sont :\n\nDécrire la population : caractériser les patients selon l’âge et la période d’intervention\nAnalyser les pratiques opératoires : identifier les opérateurs, les contextes et les types d’anesthésie utilisés\nExaminer les indications : comprendre les raisons médicales et autres motivant les interventions\nExplorer les tendances temporelles : observer l’évolution du nombre d’interventions au fil des années\nIdentifier les facteurs associés : mettre en évidence les relations entre différentes variables"
+  },
+  {
+    "objectID": "analyse_circoncision.html#méthodologie",
+    "href": "analyse_circoncision.html#méthodologie",
+    "title": "Analyse des données de circoncision",
+    "section": "",
+    "text": "L’analyse repose sur des méthodes statistiques descriptives et exploratoires utilisant le langage R et les packages suivants :\n\ndplyr pour la manipulation des données\nggplot2 pour les visualisations\nlubridate pour le traitement des dates\nforcats pour la gestion des variables catégorielles"
+  },
+  {
+    "objectID": "analyse_circoncision.html#noms-de-colonnes",
+    "href": "analyse_circoncision.html#noms-de-colonnes",
+    "title": "Analyse des données de circoncision",
+    "section": "2.1 Noms de colonnes",
+    "text": "2.1 Noms de colonnes\n\n\nCode\nnames(data)\n\n\n [1] \"Date\"                                                              \n [2] \"Âge.au.moment.de.la.circoncision..mois.années.\"                    \n [3] \"age.en.jours\"                                                      \n [4] \"age.en.mois\"                                                       \n [5] \"age.en.année\"                                                      \n [6] \"État.nutritionnel\"                                                 \n [7] \"Indication.de.la.circoncision\"                                     \n [8] \"Opérateur\"                                                         \n [9] \"Contexte\"                                                          \n[10] \"Anesthésie\"                                                        \n[11] \"Antécédent.d.infection.génito.urinaire..0.1.\"                      \n[12] \"Antécédent.de.prématurité..0.1.\"                                   \n[13] \"Antécédent.de.chirurgie.urogénitale..0.1.\"                         \n[14] \"Hygiène.locale.préopératoire\"                                      \n[15] \"Utilisation.d.antibioprophylaxie..0.1.\"                            \n[16] \"Conditions.d.asepsie.respectées..0.1.\"                             \n[17] \"Type.de.pansement\"                                                 \n[18] \"Délai.consultation.si.complication..jours.\"                        \n[19] \"Hémorragie.post.opératoire..0.1.\"                                  \n[20] \"Gravité.hémorragie\"                                                \n[21] \"Infection.du.site.opératoire..0.1.\"                                \n[22] \"Œdème...hématome.important..0.1.\"                                  \n[23] \"Retard.de.chute...impaction.de.l.anneau..si.Plastibell.ring...0.1.\"\n[24] \"Douleur.persistante...mal.contrôlée..0.1.\"                         \n[25] \"Adhérences.balano.préputielles..0.1.\"                              \n[26] \"Excision.incomplète...excès.cutané..0.1.\"                          \n[27] \"Besoin.de.révision.chirurgicale..0.1.\"                             \n[28] \"Sténose.méatale..0.1.\"                                             \n[29] \"Fistule.uréthro.cutanée..0.1.\"                                     \n[30] \"Lésion.iatrogène.du.gland...urètre..0.1.\"                          \n[31] \"Nécrose...ischémie.du.gland..0.1.\"                                 \n[32] \"Aspect.esthétique.insatisfaisant..0.1.\"                            \n[33] \"Délai.entre.circoncision.et.complication..jours.\"                  \n[34] \"annee\"                                                             \n[35] \"age_jours\"                                                         \n[36] \"age_mois\"                                                          \n[37] \"age_annee\"                                                         \n[38] \"operateur\"                                                         \n[39] \"contexte\"                                                          \n[40] \"anesthesie\"                                                        \n[41] \"indication\"                                                        \n\n\nLe jeu de données contient plusieurs variables clés permettant une analyse multidimensionnelle des interventions."
+  },
+  {
+    "objectID": "analyse_circoncision.html#aperçu-des-premières-observations",
+    "href": "analyse_circoncision.html#aperçu-des-premières-observations",
+    "title": "Analyse des données de circoncision",
+    "section": "2.2 Aperçu des premières observations",
+    "text": "2.2 Aperçu des premières observations\n\n\nCode\nhead(data, 5)\n\n\n        Date Âge.au.moment.de.la.circoncision..mois.années. age.en.jours\n1 2020-12-31                                            416          416\n2 2019-12-31                                           1728         1728\n3 2019-12-31                                           2956         2956\n4 2015-12-31                                           3521         3521\n5 2014-12-31                                           3283         3283\n  age.en.mois age.en.année État.nutritionnel Indication.de.la.circoncision\n1          14            1       dénutrition                      médicale\n2          57            5       dénutrition                    religieuse\n3          97            8       dénutrition                         autre\n4         116           10           obésité                         autre\n5         108            9       dénutrition                    religieuse\n                Opérateur Contexte Anesthésie\n1                pediatre domicile     locale\n2              chirurgien  cabinet     aucune\n3              chirurgien domicile     aucune\n4 circociseur traditionel  cabinet   générale\n5              chirurgien  hôpital     locale\n  Antécédent.d.infection.génito.urinaire..0.1. Antécédent.de.prématurité..0.1.\n1                                            0                               0\n2                                            1                               0\n3                                            0                               0\n4                                            0                               0\n5                                            0                               1\n  Antécédent.de.chirurgie.urogénitale..0.1. Hygiène.locale.préopératoire\n1                                         0                        bonne\n2                                         0                     mauvaise\n3                                         0                        bonne\n4                                         0                     mauvaise\n5                                         0                        bonne\n  Utilisation.d.antibioprophylaxie..0.1. Conditions.d.asepsie.respectées..0.1.\n1                                      1                                     1\n2                                      1                                     1\n3                                      1                                     1\n4                                      1                                     1\n5                                      1                                     1\n     Type.de.pansement Délai.consultation.si.complication..jours.\n1 creme anticoagulante                                         29\n2 creme anticoagulante                                          6\n3 creme anticoagulante                                         24\n4 creme anticoagulante                                         22\n5            compresse                                          7\n  Hémorragie.post.opératoire..0.1. Gravité.hémorragie\n1                                0                   \n2                                0                   \n3                                0                   \n4                                0                   \n5                                0                   \n  Infection.du.site.opératoire..0.1. Œdème...hématome.important..0.1.\n1                                  0                                0\n2                                  0                                0\n3                                  0                                0\n4                                  0                                0\n5                                  0                                0\n  Retard.de.chute...impaction.de.l.anneau..si.Plastibell.ring...0.1.\n1                                                                  0\n2                                                                  0\n3                                                                  0\n4                                                                  0\n5                                                                  0\n  Douleur.persistante...mal.contrôlée..0.1.\n1                                         0\n2                                         0\n3                                         0\n4                                         0\n5                                         0\n  Adhérences.balano.préputielles..0.1. Excision.incomplète...excès.cutané..0.1.\n1                                    0                                        0\n2                                    0                                        0\n3                                    0                                        0\n4                                    0                                        0\n5                                    0                                        0\n  Besoin.de.révision.chirurgicale..0.1. Sténose.méatale..0.1.\n1                                     0                     0\n2                                     0                     0\n3                                     0                     0\n4                                     0                     0\n5                                     0                     0\n  Fistule.uréthro.cutanée..0.1. Lésion.iatrogène.du.gland...urètre..0.1.\n1                             0                                        0\n2                             0                                        0\n3                             0                                        0\n4                             0                                        0\n5                             0                                        0\n  Nécrose...ischémie.du.gland..0.1. Aspect.esthétique.insatisfaisant..0.1.\n1                                 0                                      0\n2                                 0                                      0\n3                                 0                                      0\n4                                 0                                      0\n5                                 0                                      0\n  Délai.entre.circoncision.et.complication..jours. annee age_jours age_mois\n1                                              111  2020       416       14\n2                                              187  2019      1728       57\n3                                               33  2019      2956       97\n4                                              270  2015      3521      116\n5                                              256  2014      3283      108\n  age_annee               operateur contexte anesthesie indication\n1         1                pediatre domicile     locale   médicale\n2         5              chirurgien  cabinet     aucune religieuse\n3         8              chirurgien domicile     aucune      autre\n4        10 circociseur traditionel  cabinet   générale      autre\n5         9              chirurgien  hôpital     locale religieuse"
+  },
+  {
+    "objectID": "analyse_circoncision.html#structure-des-données",
+    "href": "analyse_circoncision.html#structure-des-données",
+    "title": "Analyse des données de circoncision",
+    "section": "2.3 Structure des données",
+    "text": "2.3 Structure des données\n\n\nCode\nstr(data)\n\n\n'data.frame':   3709 obs. of  41 variables:\n $ Date                                                              : Date, format: \"2020-12-31\" \"2019-12-31\" ...\n $ Âge.au.moment.de.la.circoncision..mois.années.                    : int  416 1728 2956 3521 3283 3465 4253 342 2626 3723 ...\n $ age.en.jours                                                      : int  416 1728 2956 3521 3283 3465 4253 342 2626 3723 ...\n $ age.en.mois                                                       : int  14 57 97 116 108 114 140 11 86 122 ...\n $ age.en.année                                                      : int  1 5 8 10 9 9 12 1 7 10 ...\n $ État.nutritionnel                                                 : chr  \"dénutrition\" \"dénutrition\" \"dénutrition\" \"obésité\" ...\n $ Indication.de.la.circoncision                                     : chr  \"médicale\" \"religieuse\" \"autre\" \"autre\" ...\n $ Opérateur                                                         : chr  \"pediatre\" \"chirurgien\" \"chirurgien\" \"circociseur traditionel\" ...\n $ Contexte                                                          : chr  \"domicile\" \"cabinet\" \"domicile\" \"cabinet\" ...\n $ Anesthésie                                                        : chr  \"locale\" \"aucune\" \"aucune\" \"générale\" ...\n $ Antécédent.d.infection.génito.urinaire..0.1.                      : int  0 1 0 0 0 0 0 1 0 1 ...\n $ Antécédent.de.prématurité..0.1.                                   : int  0 0 0 0 1 0 0 0 0 1 ...\n $ Antécédent.de.chirurgie.urogénitale..0.1.                         : int  0 0 0 0 0 0 0 0 0 0 ...\n $ Hygiène.locale.préopératoire                                      : chr  \"bonne\" \"mauvaise\" \"bonne\" \"mauvaise\" ...\n $ Utilisation.d.antibioprophylaxie..0.1.                            : int  1 1 1 1 1 1 0 0 1 1 ...\n $ Conditions.d.asepsie.respectées..0.1.                             : int  1 1 1 1 1 0 1 1 1 1 ...\n $ Type.de.pansement                                                 : chr  \"creme anticoagulante\" \"creme anticoagulante\" \"creme anticoagulante\" \"creme anticoagulante\" ...\n $ Délai.consultation.si.complication..jours.                        : int  29 6 24 22 7 4 3 20 8 6 ...\n $ Hémorragie.post.opératoire..0.1.                                  : int  0 0 0 0 0 0 0 0 0 0 ...\n $ Gravité.hémorragie                                                : chr  \"\" \"\" \"\" \"\" ...\n $ Infection.du.site.opératoire..0.1.                                : int  0 0 0 0 0 0 0 0 0 0 ...\n $ Œdème...hématome.important..0.1.                                  : int  0 0 0 0 0 0 0 0 0 0 ...\n $ Retard.de.chute...impaction.de.l.anneau..si.Plastibell.ring...0.1.: int  0 0 0 0 0 0 0 0 0 0 ...\n $ Douleur.persistante...mal.contrôlée..0.1.                         : int  0 0 0 0 0 0 0 0 0 0 ...\n $ Adhérences.balano.préputielles..0.1.                              : int  0 0 0 0 0 0 0 0 0 0 ...\n $ Excision.incomplète...excès.cutané..0.1.                          : int  0 0 0 0 0 0 0 1 0 0 ...\n $ Besoin.de.révision.chirurgicale..0.1.                             : int  0 0 0 0 0 0 1 0 0 0 ...\n $ Sténose.méatale..0.1.                                             : int  0 0 0 0 0 0 0 0 0 0 ...\n $ Fistule.uréthro.cutanée..0.1.                                     : int  0 0 0 0 0 0 0 0 0 0 ...\n $ Lésion.iatrogène.du.gland...urètre..0.1.                          : int  0 0 0 0 0 0 0 0 0 0 ...\n $ Nécrose...ischémie.du.gland..0.1.                                 : int  0 0 0 0 0 0 0 0 0 0 ...\n $ Aspect.esthétique.insatisfaisant..0.1.                            : int  0 0 0 0 0 0 0 0 0 0 ...\n $ Délai.entre.circoncision.et.complication..jours.                  : int  111 187 33 270 256 135 339 112 52 197 ...\n $ annee                                                             : num  2020 2019 2019 2015 2014 ...\n $ age_jours                                                         : num  416 1728 2956 3521 3283 ...\n $ age_mois                                                          : num  14 57 97 116 108 114 140 11 86 122 ...\n $ age_annee                                                         : num  1 5 8 10 9 9 12 1 7 10 ...\n $ operateur                                                         : chr  \"pediatre\" \"chirurgien\" \"chirurgien\" \"circociseur traditionel\" ...\n $ contexte                                                          : chr  \"domicile\" \"cabinet\" \"domicile\" \"cabinet\" ...\n $ anesthesie                                                        : chr  \"locale\" \"aucune\" \"aucune\" \"générale\" ...\n $ indication                                                        : chr  \"médicale\" \"religieuse\" \"autre\" \"autre\" ...\n\n\nInterprétation : Le jeu de données est structuré avec des variables numériques (âges) et catégorielles (opérateur, contexte, anesthésie, indication), ce qui permet une analyse à la fois quantitative et qualitative."
+  },
+  {
+    "objectID": "analyse_circoncision.html#caractéristiques-de-lâge",
+    "href": "analyse_circoncision.html#caractéristiques-de-lâge",
+    "title": "Analyse des données de circoncision",
+    "section": "3.1 Caractéristiques de l’âge",
+    "text": "3.1 Caractéristiques de l’âge\n\n3.1.1 Statistiques résumées\n\n\nCode\nresume_age &lt;- data %&gt;%\n  summarise(\n    n = n(),\n    age_median_jours = median(age_jours, na.rm = TRUE),\n    age_Q1_jours = quantile(age_jours, 0.25, na.rm = TRUE),\n    age_Q3_jours = quantile(age_jours, 0.75, na.rm = TRUE),\n    age_median_mois = median(age_mois, na.rm = TRUE),\n    age_moyen_mois = mean(age_mois, na.rm = TRUE),\n    ecart_type_mois = sd(age_mois, na.rm = TRUE)\n  )\n\nresume_age %&gt;% kable(digits = 1)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nn\nage_median_jours\nage_Q1_jours\nage_Q3_jours\nage_median_mois\nage_moyen_mois\necart_type_mois\n\n\n\n\n3709\n2228\n1165\n3294\n73\n73.4\n40.7\n\n\n\n\n\nAnalyse : L’âge médian de 73 mois indique que la majorité des interventions sont réalisées durant la petite enfance. L’intervalle interquartile (Q1-Q3) permet d’observer la variabilité de l’âge au moment de l’intervention.\n\n\n3.1.2 Distribution de l’âge (en mois)\n\n\nCode\nggplot(data, aes(x = age_mois)) +\n  geom_histogram(bins = 30, fill = \"#4a90e2\", color = \"white\", alpha = 0.8) +\n  geom_vline(aes(xintercept = median(age_mois, na.rm = TRUE)), \n             color = \"red\", linetype = \"dashed\", size = 1) +\n  annotate(\"text\", x = median(data$age_mois, na.rm = TRUE) + 10, \n           y = Inf, label = paste(\"Médiane:\", round(median(data$age_mois, na.rm = TRUE), 1), \"mois\"), \n           vjust = 2, color = \"red\") +\n  labs(title = \"Distribution de l'âge au moment de la circoncision\", \n       x = \"Âge (mois)\", y = \"Effectif\") +\n  theme_minimal(base_size = 12)\n\n\n\n\n\n\n\n\nFigure 1: La distribution de l’âge montre une concentration importante dans les premiers mois de vie, avec une queue de distribution s’étendant vers les âges plus avancés.\n\n\n\n\n\nObservations clés :\n\nLa distribution présente une asymétrie positive (skewness), avec une majorité d’interventions précoces\nUn pic observable dans les premiers mois suggère une pratique courante de circoncision néonatale ou infantile\nLa présence de cas à des âges plus avancés reflète des indications médicales ou des choix personnels tardifs"
+  },
+  {
+    "objectID": "analyse_circoncision.html#tendance-annuelle-des-interventions",
+    "href": "analyse_circoncision.html#tendance-annuelle-des-interventions",
+    "title": "Analyse des données de circoncision",
+    "section": "4.1 Tendance annuelle des interventions",
+    "text": "4.1 Tendance annuelle des interventions\n\n\nCode\ncas_par_annee &lt;- data %&gt;%\n  group_by(annee) %&gt;%\n  summarise(n = n())\n\nggplot(cas_par_annee, aes(x = annee, y = n)) +\n  geom_line(color = \"#4a90e2\", size = 1.5) +\n  geom_point(color = \"#2c5aa0\", size = 3) +\n  geom_text(aes(label = n), vjust = -0.5, size = 3.5) +\n  geom_smooth(method = \"loess\", se = TRUE, color = \"#e74c3c\", linetype = \"dashed\") +\n  labs(title = \"Nombre de circoncisions par année\", \n       x = \"Année\", y = \"Nombre de cas\") +\n  theme_minimal(base_size = 12) +\n  theme(panel.grid.minor = element_blank())\n\n\n\n\n\n\n\n\nFigure 2: Évolution du nombre de circoncisions par année, révélant les tendances et variations dans la pratique chirurgicale.\n\n\n\n\n\nAnalyse temporelle :\n\nLa courbe de tendance (en rouge) permet d’identifier les périodes de croissance ou de décroissance\nLes variations annuelles peuvent refléter des changements dans la demande, la disponibilité des services ou des facteurs sociodémographiques\nUne analyse plus approfondie nécessiterait la prise en compte de facteurs externes (politiques de santé, événements sociétaux)"
+  },
+  {
+    "objectID": "analyse_circoncision.html#distribution-des-interventions-par-praticien",
+    "href": "analyse_circoncision.html#distribution-des-interventions-par-praticien",
+    "title": "Analyse des données de circoncision",
+    "section": "5.1 Distribution des interventions par praticien",
+    "text": "5.1 Distribution des interventions par praticien\n\n\nCode\noperateurs_stats &lt;- data %&gt;%\n  count(operateur, sort = TRUE) %&gt;%\n  mutate(\n    pourcentage = round(100 * n / sum(n), 1),\n    pourcentage_cumul = cumsum(pourcentage)\n  )\n\noperateurs_stats %&gt;%\n  head(10) %&gt;%\n  kable(col.names = c(\"Opérateur\", \"Nombre\", \"Pourcentage (%)\", \"Cumulé (%)\"))\n\n\n\n\n\nOpérateur\nNombre\nPourcentage (%)\nCumulé (%)\n\n\n\n\nresident generaliste\n964\n26.0\n26.0\n\n\nchirurgien\n947\n25.5\n51.5\n\n\ncircociseur traditionel\n925\n24.9\n76.4\n\n\npediatre\n873\n23.5\n99.9\n\n\n\n\n\nInterprétation : La concentration des interventions chez certains opérateurs peut indiquer une spécialisation ou une expérience particulière. Le principe de Pareto (80/20) peut s’appliquer ici, où une minorité d’opérateurs réalise la majorité des interventions."
+  },
+  {
+    "objectID": "analyse_circoncision.html#visualisation-des-principaux-opérateurs",
+    "href": "analyse_circoncision.html#visualisation-des-principaux-opérateurs",
+    "title": "Analyse des données de circoncision",
+    "section": "5.2 Visualisation des principaux opérateurs",
+    "text": "5.2 Visualisation des principaux opérateurs\n\n\nCode\ntop_operateurs &lt;- data %&gt;%\n  count(operateur, sort = TRUE) %&gt;%\n  head(15)\n\ndata %&gt;%\n  filter(operateur %in% top_operateurs$operateur) %&gt;%\n  ggplot(aes(x = fct_reorder(operateur, operateur, .fun = length))) +\n  geom_bar(fill = \"#e74c3c\", alpha = 0.8) +\n  coord_flip() +\n  labs(title = \"Répartition par opérateur (Top 15)\", \n       x = \"Opérateur\", y = \"Nombre d'interventions\") +\n  theme_minimal(base_size = 12) +\n  theme(axis.text.y = element_text(size = 10))\n\n\n\n\n\n\n\n\nFigure 3: Répartition des 15 opérateurs les plus actifs, illustrant la concentration de l’activité chirurgicale."
+  },
+  {
+    "objectID": "analyse_circoncision.html#répartition-selon-le-contexte-dintervention",
+    "href": "analyse_circoncision.html#répartition-selon-le-contexte-dintervention",
+    "title": "Analyse des données de circoncision",
+    "section": "6.1 Répartition selon le contexte d’intervention",
+    "text": "6.1 Répartition selon le contexte d’intervention\n\n\nCode\ncontexte_stats &lt;- data %&gt;%\n  count(contexte, sort = TRUE) %&gt;%\n  mutate(pourcentage = round(100 * n / sum(n), 1))\n\ncontexte_stats %&gt;% kable(col.names = c(\"Contexte\", \"Nombre\", \"Pourcentage (%)\"))\n\n\n\n\n\nContexte\nNombre\nPourcentage (%)\n\n\n\n\ncabinet\n1250\n33.7\n\n\nhôpital\n1241\n33.5\n\n\ndomicile\n1218\n32.8\n\n\n\n\n\nAnalyse contextuelle : Le contexte d’intervention (ambulatoire, hospitalier, cabinet privé, etc.) influence les modalités opératoires, le suivi post-opératoire et potentiellement les résultats cliniques."
+  },
+  {
+    "objectID": "analyse_circoncision.html#visualisation-par-contexte",
+    "href": "analyse_circoncision.html#visualisation-par-contexte",
+    "title": "Analyse des données de circoncision",
+    "section": "6.2 Visualisation par contexte",
+    "text": "6.2 Visualisation par contexte\n\n\nCode\nggplot(data, aes(x = fct_infreq(contexte))) +\n  geom_bar(fill = \"#16a085\", alpha = 0.8) +\n  geom_text(stat = \"count\", aes(label = after_stat(count)), vjust = -0.5, size = 4) +\n  labs(title = \"Répartition par contexte d'intervention\", \n       x = \"Contexte\", y = \"Nombre d'interventions\") +\n  theme_minimal(base_size = 12) +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1))\n\n\n\n\n\n\n\n\nFigure 4: Distribution des interventions selon le contexte, reflétant l’organisation des soins."
+  },
+  {
+    "objectID": "analyse_circoncision.html#types-danesthésie-pratiqués",
+    "href": "analyse_circoncision.html#types-danesthésie-pratiqués",
+    "title": "Analyse des données de circoncision",
+    "section": "7.1 Types d’anesthésie pratiqués",
+    "text": "7.1 Types d’anesthésie pratiqués\n\n\nCode\nanesthesie_stats &lt;- data %&gt;%\n  count(anesthesie, sort = TRUE) %&gt;%\n  mutate(pourcentage = round(100 * n / sum(n), 1))\n\nanesthesie_stats %&gt;% kable(col.names = c(\"Type d'anesthésie\", \"Nombre\", \"Pourcentage (%)\"))\n\n\n\n\n\nType d’anesthésie\nNombre\nPourcentage (%)\n\n\n\n\nlocale\n1281\n34.5\n\n\naucune\n1220\n32.9\n\n\ngénérale\n1208\n32.6\n\n\n\n\n\nConsidérations cliniques : Le choix de l’anesthésie dépend de l’âge du patient, du contexte chirurgical, de l’expérience de l’opérateur et des ressources disponibles. L’anesthésie locale est souvent privilégiée pour les nourrissons, tandis que l’anesthésie générale peut être nécessaire pour les enfants plus âgés."
+  },
+  {
+    "objectID": "analyse_circoncision.html#visualisation-des-pratiques-anesthésiques",
+    "href": "analyse_circoncision.html#visualisation-des-pratiques-anesthésiques",
+    "title": "Analyse des données de circoncision",
+    "section": "7.2 Visualisation des pratiques anesthésiques",
+    "text": "7.2 Visualisation des pratiques anesthésiques\n\n\nCode\nggplot(data, aes(x = fct_infreq(anesthesie))) +\n  geom_bar(fill = \"#27ae60\", alpha = 0.8) +\n  coord_flip() +\n  labs(title = \"Types d'anesthésie utilisés\", \n       x = \"Type d'anesthésie\", y = \"Nombre d'interventions\") +\n  theme_minimal(base_size = 12)\n\n\n\n\n\n\n\n\nFigure 5: Répartition des types d’anesthésie utilisés lors des circoncisions."
+  },
+  {
+    "objectID": "analyse_circoncision.html#principales-indications-médicales-et-autres",
+    "href": "analyse_circoncision.html#principales-indications-médicales-et-autres",
+    "title": "Analyse des données de circoncision",
+    "section": "8.1 Principales indications médicales et autres",
+    "text": "8.1 Principales indications médicales et autres\n\n\nCode\nindications_stats &lt;- data %&gt;%\n  count(indication, sort = TRUE) %&gt;%\n  mutate(pourcentage = round(100 * n / sum(n), 1))\n\nindications_stats %&gt;%\n  head(10) %&gt;%\n  kable(col.names = c(\"Indication\", \"Nombre\", \"Pourcentage (%)\"))\n\n\n\n\n\nIndication\nNombre\nPourcentage (%)\n\n\n\n\nmédicale\n1246\n33.6\n\n\nautre\n1244\n33.5\n\n\nreligieuse\n1219\n32.9\n\n\n\n\n\nAnalyse des indications : Les indications peuvent être classées en plusieurs catégories :\n\nIndications médicales : phimosis, infections récurrentes, balanite\nIndications culturelles/religieuses : pratiques traditionnelles\nIndications préventives : hygiène, prévention des infections\nAutres indications : esthétiques ou convenance personnelle"
+  },
+  {
+    "objectID": "analyse_circoncision.html#visualisation-des-principales-indications",
+    "href": "analyse_circoncision.html#visualisation-des-principales-indications",
+    "title": "Analyse des données de circoncision",
+    "section": "8.2 Visualisation des principales indications",
+    "text": "8.2 Visualisation des principales indications\n\n\nCode\ntop_indications &lt;- data %&gt;%\n  count(indication, sort = TRUE) %&gt;%\n  head(10)\n\ndata %&gt;%\n  filter(indication %in% top_indications$indication) %&gt;%\n  ggplot(aes(x = fct_reorder(indication, indication, .fun = length))) +\n  geom_bar(fill = \"#d35400\", alpha = 0.8) +\n  coord_flip() +\n  labs(title = \"Top 10 des indications de circoncision\", \n       x = \"Indication\", y = \"Nombre d'interventions\") +\n  theme_minimal(base_size = 12) +\n  theme(axis.text.y = element_text(size = 10))\n\n\n\n\n\n\n\n\nFigure 6: Top 10 des indications justifiant les circoncisions, montrant la diversité des motivations."
+  },
+  {
+    "objectID": "analyse_circoncision.html#âge-selon-le-contexte",
+    "href": "analyse_circoncision.html#âge-selon-le-contexte",
+    "title": "Analyse des données de circoncision",
+    "section": "9.1 Âge selon le contexte",
+    "text": "9.1 Âge selon le contexte\n\n\nCode\ndata %&gt;%\n  filter(!is.na(contexte) & !is.na(age_mois)) %&gt;%\n  ggplot(aes(x = contexte, y = age_mois, fill = contexte)) +\n  geom_boxplot(alpha = 0.7) +\n  labs(title = \"Distribution de l'âge selon le contexte\", \n       x = \"Contexte\", y = \"Âge (mois)\") +\n  theme_minimal(base_size = 12) +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1),\n        legend.position = \"none\") +\n  scale_fill_brewer(palette = \"Set2\")\n\n\n\n\n\n\n\n\nFigure 7: Comparaison des distributions d’âge selon le contexte d’intervention.\n\n\n\n\n\nObservations : Les différences d’âge selon le contexte peuvent révéler des pratiques spécifiques : les interventions précoces en milieu hospitalier versus des interventions plus tardives en cabinet privé."
+  },
+  {
+    "objectID": "analyse_circoncision.html#synthèse-des-résultats-principaux",
+    "href": "analyse_circoncision.html#synthèse-des-résultats-principaux",
+    "title": "Analyse des données de circoncision",
+    "section": "10.1 Synthèse des résultats principaux",
+    "text": "10.1 Synthèse des résultats principaux\nCette analyse descriptive des données de circoncision a permis de mettre en évidence plusieurs constats importants :\n\n10.1.1 1. Caractéristiques de la population\n\nVolume total : 3709 interventions enregistrées\nPériode d’observation : de 2009 à 2024\nÂge médian : 73 mois, indiquant une pratique principalement pédiatrique\nDistribution d’âge : concentration dans les premiers mois de vie, avec une variabilité notable\n\n\n\n10.1.2 2. Organisation des soins\n\nConcentration de l’activité : quelques opérateurs réalisent une part importante des interventions, suggérant une spécialisation\nDiversité des contextes : interventions réalisées dans différents cadres (hospitalier, ambulatoire, privé)\nPratiques anesthésiques : adaptation du type d’anesthésie selon l’âge et le contexte\n\n\n\n10.1.3 3. Indications cliniques\n\nDiversité des motivations : indications médicales, culturelles et préventives\nPrédominance : certaines indications reviennent fréquemment, reflétant les standards de pratique\n\n\n\n10.1.4 4. Tendances temporelles\n\nÉvolution : variations du nombre d’interventions au fil des années\nStabilité relative : malgré des fluctuations, la pratique demeure constante"
+  },
+  {
+    "objectID": "analyse_circoncision.html#implications-pratiques",
+    "href": "analyse_circoncision.html#implications-pratiques",
+    "title": "Analyse des données de circoncision",
+    "section": "10.2 Implications pratiques",
+    "text": "10.2 Implications pratiques\n\n10.2.1 Pour la pratique clinique\n\nL’analyse révèle des patterns d’âge qui peuvent guider les recommandations sur le timing optimal\nLa concentration chez certains opérateurs souligne l’importance de l’expérience et de la formation continue\nLa diversité des contextes nécessite des protocoles adaptés à chaque environnement\n\n\n\n10.2.2 Pour la santé publique\n\nLes données permettent d’évaluer l’offre de soins et d’identifier d’éventuels besoins non satisfaits\nL’analyse des tendances temporelles aide à la planification des ressources\nLa documentation des indications contribue à l’amélioration des pratiques"
+  },
+  {
+    "objectID": "analyse_circoncision.html#limites-de-létude",
+    "href": "analyse_circoncision.html#limites-de-létude",
+    "title": "Analyse des données de circoncision",
+    "section": "10.3 Limites de l’étude",
+    "text": "10.3 Limites de l’étude\nCette analyse présente certaines limitations :\n\nNature descriptive : absence d’analyses inférentielles ou prédictives\nDonnées manquantes : possibles valeurs manquantes non explorées en détail\nAbsence de suivi : pas d’information sur les complications ou les résultats à long terme\nContexte local : les résultats peuvent ne pas être généralisables à d’autres contextes"
+  },
+  {
+    "objectID": "analyse_circoncision.html#perspectives-et-recommandations",
+    "href": "analyse_circoncision.html#perspectives-et-recommandations",
+    "title": "Analyse des données de circoncision",
+    "section": "10.4 Perspectives et recommandations",
+    "text": "10.4 Perspectives et recommandations\n\n10.4.1 Analyses futures\n\nModélisation prédictive : développer des modèles pour anticiper les besoins\nAnalyse des complications : si les données sont disponibles, étudier les facteurs de risque\nComparaisons : benchmarking avec d’autres établissements ou régions\nSéries temporelles : analyses plus sophistiquées des tendances\n\n\n\n10.4.2 Amélioration de la collecte de données\n\nStandardisation des variables (nomenclature, codage)\nEnrichissement avec des données de suivi post-opératoire\nDocumentation systématique des complications et événements indésirables\nCollecte de données sur la satisfaction des patients/familles\n\n\n\n10.4.3 Impact clinique\nCette analyse constitue une base solide pour :\n\nL’audit des pratiques professionnelles\nL’amélioration continue de la qualité des soins\nLa formation des nouveaux praticiens\nL’information des patients et de leurs familles"
+  },
+  {
+    "objectID": "analyse_circoncision.html#conclusion-finale",
+    "href": "analyse_circoncision.html#conclusion-finale",
+    "title": "Analyse des données de circoncision",
+    "section": "10.5 Conclusion finale",
+    "text": "10.5 Conclusion finale\nLes données de circoncision analysées révèlent une pratique bien établie, organisée autour d’opérateurs expérimentés et adaptée aux besoins de la population. L’âge médian d’intervention cohérent avec les recommandations, la diversité des contextes de soins et la variété des indications témoignent d’une approche individualisée et complète.\nCette analyse descriptive pose les fondations pour des travaux ultérieurs plus approfondis, notamment des études analytiques explorant les facteurs associés aux résultats cliniques, ou des recherches comparatives évaluant différentes techniques et protocoles.\nLa documentation systématique et l’analyse régulière de telles données constituent des outils essentiels pour garantir la qualité et la sécurité des soins chirurgicaux pédiatriques.\n\nDate de l’analyse : 2025-12-18\nOutils utilisés : R version 4.5.2, Quarto, packages tidyverse"
+  },
+  {
+    "objectID": "analyse_circoncision.html#code-complet-de-lanalyse",
+    "href": "analyse_circoncision.html#code-complet-de-lanalyse",
+    "title": "Analyse des données de circoncision",
+    "section": "11.1 Code complet de l’analyse",
+    "text": "11.1 Code complet de l’analyse\nLe code source complet est disponible en dépliant les sections de code tout au long du document (utiliser les boutons “Code” en haut à droite de chaque bloc)."
+  },
+  {
+    "objectID": "analyse_circoncision.html#références",
+    "href": "analyse_circoncision.html#références",
+    "title": "Analyse des données de circoncision",
+    "section": "11.2 Références",
+    "text": "11.2 Références\n\nMéthodologie d’analyse descriptive en R\nDocumentation des packages utilisés : dplyr, ggplot2, lubridate\nBonnes pratiques en visualisation de données"
+  },
+  {
+    "objectID": "analyse_circoncision.html#contact",
+    "href": "analyse_circoncision.html#contact",
+    "title": "Analyse des données de circoncision",
+    "section": "11.3 Contact",
+    "text": "11.3 Contact\nPour toute question concernant cette analyse, veuillez contacter : Raed Mohamed Amine Hamrouni"
+  },
+  {
+    "objectID": "presentation.html#plan-de-la-présentation",
+    "href": "presentation.html#plan-de-la-présentation",
+    "title": "Analyse des données de circoncision",
+    "section": "Plan de la présentation",
+    "text": "Plan de la présentation\n\n\nIntroduction et objectifs\nVue d’ensemble des données\nCaractéristiques de la population\nÉvolution temporelle\nAnalyse des opérateurs\nContexte et anesthésie\nIndications médicales\nAnalyses croisées\nConclusions et perspectives"
+  },
+  {
+    "objectID": "presentation.html#contexte-de-létude",
+    "href": "presentation.html#contexte-de-létude",
+    "title": "Analyse des données de circoncision",
+    "section": "Contexte de l’étude",
+    "text": "Contexte de l’étude\n\n\nProblématique\n\nIntervention chirurgicale courante\nMotivations diverses (médicales, culturelles)\nBesoin d’analyse des pratiques\n\n\nApproche\n\nAnalyse descriptive complète\nExploration des tendances\nIdentification des patterns"
+  },
+  {
+    "objectID": "presentation.html#objectifs-de-lanalyse",
+    "href": "presentation.html#objectifs-de-lanalyse",
+    "title": "Analyse des données de circoncision",
+    "section": "Objectifs de l’analyse",
+    "text": "Objectifs de l’analyse\n\n\n📊 Décrire la population : âge, période d’intervention\n👨‍⚕️ Analyser les pratiques : opérateurs, contextes, anesthésie\n🏥 Examiner les indications : raisons médicales et autres\n📈 Explorer les tendances : évolution temporelle\n🔍 Identifier les facteurs : relations entre variables"
+  },
+  {
+    "objectID": "presentation.html#méthodologie",
+    "href": "presentation.html#méthodologie",
+    "title": "Analyse des données de circoncision",
+    "section": "Méthodologie",
+    "text": "Méthodologie\n\n\nOutils et packages R\n\ndplyr : manipulation de données\nggplot2 : visualisations\nlubridate : gestion des dates\nforcats : variables catégorielles\n\n\nApproche analytique\n\nStatistiques descriptives\nVisualisations graphiques\nAnalyses croisées\nInterprétation contextuelle"
+  },
+  {
+    "objectID": "presentation.html#aperçu-du-jeu-de-données",
+    "href": "presentation.html#aperçu-du-jeu-de-données",
+    "title": "Analyse des données de circoncision",
+    "section": "Aperçu du jeu de données",
+    "text": "Aperçu du jeu de données\n\nhead(data, 3) %&gt;% \n  select(1:6) %&gt;%\n  kable()\n\n\n\n\n\n\n\n\n\n\n\n\nDate\nÂge.au.moment.de.la.circoncision..mois.années.\nage.en.jours\nage.en.mois\nage.en.année\nÉtat.nutritionnel\n\n\n\n\n2020-12-31\n416\n416\n14\n1\ndénutrition\n\n\n2019-12-31\n1728\n1728\n57\n5\ndénutrition\n\n\n2019-12-31\n2956\n2956\n97\n8\ndénutrition\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\nDonnées anonymisées contenant des informations sur l’âge, l’opérateur, le contexte, l’anesthésie et les indications"
+  },
+  {
+    "objectID": "presentation.html#statistiques-globales",
+    "href": "presentation.html#statistiques-globales",
+    "title": "Analyse des données de circoncision",
+    "section": "Statistiques globales",
+    "text": "Statistiques globales\n\n\nVolume et période\n\n\n📊 Nombre total d'interventions: 3709 \n\n\n📅 Période: 2009 - 2024 \n\n\n⏱️ Durée: 15 ans\n\n\n\nÂge des patients\n\n\n\n\n\nMédiane (mois)\nMoyenne (mois)\nQ1 (mois)\nQ3 (mois)\n\n\n\n\n73\n73.4\n38\n108"
+  },
+  {
+    "objectID": "presentation.html#distribution-de-lâge",
+    "href": "presentation.html#distribution-de-lâge",
+    "title": "Analyse des données de circoncision",
+    "section": "Distribution de l’âge",
+    "text": "Distribution de l’âge"
+  },
+  {
+    "objectID": "presentation.html#interprétation-de-lâge",
+    "href": "presentation.html#interprétation-de-lâge",
+    "title": "Analyse des données de circoncision",
+    "section": "Interprétation de l’âge",
+    "text": "Interprétation de l’âge\n\n\n🍼 Concentration précoce : majorité des interventions dans les premiers mois\n📊 Distribution asymétrique : queue étendue vers les âges plus avancés\n👶 Pratique néonatale : pic observable dans la petite enfance\n🏥 Indications variées : interventions tardives pour raisons médicales spécifiques\n\n\n\n\n\n\n\n\nPoint clé\n\n\nL’âge médian de 73 mois confirme une pratique principalement pédiatrique précoce"
+  },
+  {
+    "objectID": "presentation.html#tendance-annuelle",
+    "href": "presentation.html#tendance-annuelle",
+    "title": "Analyse des données de circoncision",
+    "section": "Tendance annuelle",
+    "text": "Tendance annuelle"
+  },
+  {
+    "objectID": "presentation.html#analyse-de-la-tendance",
+    "href": "presentation.html#analyse-de-la-tendance",
+    "title": "Analyse des données de circoncision",
+    "section": "Analyse de la tendance",
+    "text": "Analyse de la tendance\n\n\nObservations\n\nVariations inter-annuelles\nTendance globale (courbe lissée)\nPics et creux identifiables\n\n\nFacteurs possibles\n\nChangements démographiques\nÉvolution des pratiques\nModifications organisationnelles\nFacteurs socio-culturels"
+  },
+  {
+    "objectID": "presentation.html#répartition-par-opérateur-top-10",
+    "href": "presentation.html#répartition-par-opérateur-top-10",
+    "title": "Analyse des données de circoncision",
+    "section": "Répartition par opérateur (Top 10)",
+    "text": "Répartition par opérateur (Top 10)"
+  },
+  {
+    "objectID": "presentation.html#concentration-de-lactivité",
+    "href": "presentation.html#concentration-de-lactivité",
+    "title": "Analyse des données de circoncision",
+    "section": "Concentration de l’activité",
+    "text": "Concentration de l’activité\n\n\n📊 Top 5 opérateurs : 99.9% des interventions\n🎯 Spécialisation : concentration chez quelques praticiens\n💡 Expérience : importance du volume pour l’expertise\n🏥 Organisation : répartition inégale de l’activité\n\n\n\n\n\n\n\n\nImportant\n\n\nPrincipe de Pareto observé : une minorité d’opérateurs réalise la majorité des interventions"
+  },
+  {
+    "objectID": "presentation.html#contexte-dintervention",
+    "href": "presentation.html#contexte-dintervention",
+    "title": "Analyse des données de circoncision",
+    "section": "Contexte d’intervention",
+    "text": "Contexte d’intervention"
+  },
+  {
+    "objectID": "presentation.html#types-danesthésie",
+    "href": "presentation.html#types-danesthésie",
+    "title": "Analyse des données de circoncision",
+    "section": "Types d’anesthésie",
+    "text": "Types d’anesthésie"
+  },
+  {
+    "objectID": "presentation.html#considérations-cliniques",
+    "href": "presentation.html#considérations-cliniques",
+    "title": "Analyse des données de circoncision",
+    "section": "Considérations cliniques",
+    "text": "Considérations cliniques\n\n\nContexte\n\nHospitalier vs ambulatoire\nImpact sur le suivi\nRessources disponibles\nOrganisation des soins\n\n\nAnesthésie\n\nAdaptation selon l’âge\nLocale vs générale\nSécurité du patient\nProtocoles établis"
+  },
+  {
+    "objectID": "presentation.html#top-10-des-indications",
+    "href": "presentation.html#top-10-des-indications",
+    "title": "Analyse des données de circoncision",
+    "section": "Top 10 des indications",
+    "text": "Top 10 des indications"
+  },
+  {
+    "objectID": "presentation.html#catégories-dindications",
+    "href": "presentation.html#catégories-dindications",
+    "title": "Analyse des données de circoncision",
+    "section": "Catégories d’indications",
+    "text": "Catégories d’indications\n\n\n🏥 Médicales : phimosis, infections récurrentes, balanite\n🕌 Culturelles/religieuses : pratiques traditionnelles\n🛡️ Préventives : hygiène, prévention des infections\n👤 Autres : convenance personnelle, esthétiques\n\n\n\n\n\n\n\n\nDiversité\n\n\nLa variété des indications reflète une approche individualisée et multifactorielle"
+  },
+  {
+    "objectID": "presentation.html#âge-selon-le-contexte",
+    "href": "presentation.html#âge-selon-le-contexte",
+    "title": "Analyse des données de circoncision",
+    "section": "Âge selon le contexte",
+    "text": "Âge selon le contexte"
+  },
+  {
+    "objectID": "presentation.html#insights-des-analyses-croisées",
+    "href": "presentation.html#insights-des-analyses-croisées",
+    "title": "Analyse des données de circoncision",
+    "section": "Insights des analyses croisées",
+    "text": "Insights des analyses croisées\n\n\nObservations\n\nVariations d’âge selon contexte\nMédianes différentes\nOutliers identifiables\nPratiques spécifiques\n\n\nImplications\n\nAdaptation des protocoles\nSélection des patients\nOrganisation des parcours\nPersonnalisation des soins"
+  },
+  {
+    "objectID": "presentation.html#synthèse-des-résultats",
+    "href": "presentation.html#synthèse-des-résultats",
+    "title": "Analyse des données de circoncision",
+    "section": "Synthèse des résultats",
+    "text": "Synthèse des résultats\n\n\nDonnées globales\n✅ 3709 interventions analysées\n✅ Période: 2009-2024\n✅ Âge médian: 73 mois\nPopulation\n\nPratique pédiatrique précoce\nDistribution asymétrique\nVariabilité notable\n\n\nPratiques\n\nConcentration chez certains opérateurs\nDiversité des contextes\nAdaptation de l’anesthésie\nIndications variées"
+  },
+  {
+    "objectID": "presentation.html#points-clés",
+    "href": "presentation.html#points-clés",
+    "title": "Analyse des données de circoncision",
+    "section": "Points clés",
+    "text": "Points clés\n\n\n🎯 Spécialisation : expertise concentrée chez quelques praticiens\n📊 Timing optimal : majorité des interventions précoces\n🏥 Organisation : adaptation du contexte aux besoins\n💊 Protocoles : anesthésie ajustée selon l’âge\n📈 Tendances : stabilité relative avec variations annuelles"
+  },
+  {
+    "objectID": "presentation.html#limites-de-létude",
+    "href": "presentation.html#limites-de-létude",
+    "title": "Analyse des données de circoncision",
+    "section": "Limites de l’étude",
+    "text": "Limites de l’étude\n\n\n\n\n\n\nÀ considérer\n\n\n\nNature descriptive uniquement\nDonnées manquantes possibles\nAbsence de suivi post-opératoire\nGénéralisation limitée au contexte local"
+  },
+  {
+    "objectID": "presentation.html#perspectives-futures",
+    "href": "presentation.html#perspectives-futures",
+    "title": "Analyse des données de circoncision",
+    "section": "Perspectives futures",
+    "text": "Perspectives futures\n\n\nAnalyses avancées\n\n🤖 Modélisation prédictive\n📊 Analyse des complications\n🔄 Séries temporelles\n📈 Benchmarking\n\n\nAméliorations\n\n📝 Standardisation des données\n🏥 Suivi post-opératoire\n📋 Documentation complète\n👥 Satisfaction patients"
+  },
+  {
+    "objectID": "presentation.html#recommandations-pratiques",
+    "href": "presentation.html#recommandations-pratiques",
+    "title": "Analyse des données de circoncision",
+    "section": "Recommandations pratiques",
+    "text": "Recommandations pratiques\n\n\n📚 Formation continue : maintien de l’expertise\n📊 Audit régulier : amélioration de la qualité\n🤝 Collaboration : partage des bonnes pratiques\n💻 Digitalisation : collecte systématique des données\n🎯 Protocoles : harmonisation des pratiques"
+  },
+  {
+    "objectID": "presentation.html#impact-et-valorisation",
+    "href": "presentation.html#impact-et-valorisation",
+    "title": "Analyse des données de circoncision",
+    "section": "Impact et valorisation",
+    "text": "Impact et valorisation\n\n\nPour les cliniciens\n\nGuide des pratiques\nRéférentiel d’activité\nBase pour l’amélioration\nSupport de formation\n\n\nPour la santé publique\n\nPlanification des ressources\nÉvaluation de l’offre\nPolitique de santé\nRecherche clinique"
+  },
+  {
+    "objectID": "presentation.html#message-principal",
+    "href": "presentation.html#message-principal",
+    "title": "Analyse des données de circoncision",
+    "section": "Message principal",
+    "text": "Message principal\n\n\n\n🎯 En résumé\n\n\nCette analyse révèle une pratique bien établie et organisée, caractérisée par :\n\nUne intervention principalement pédiatrique précoce\nUne expertise concentrée chez des praticiens expérimentés\nUne adaptation aux besoins individuels (contexte, anesthésie, indications)\nUne base solide pour l’amélioration continue de la qualité des soins"
+  },
+  {
+    "objectID": "presentation.html#prochaines-étapes",
+    "href": "presentation.html#prochaines-étapes",
+    "title": "Analyse des données de circoncision",
+    "section": "Prochaines étapes",
+    "text": "Prochaines étapes\n\n\n📊 Approfondissement des analyses statistiques\n🔬 Études analytiques sur les facteurs de risque\n📈 Développement de modèles prédictifs\n🤝 Comparaisons multicentriques\n📚 Publication des résultats"
+  },
+  {
+    "objectID": "presentation.html#merci-de-votre-attention",
+    "href": "presentation.html#merci-de-votre-attention",
+    "title": "Analyse des données de circoncision",
+    "section": "Merci de votre attention !",
+    "text": "Merci de votre attention !\n\n\n\n📧 Contact\n\n\nRaed Mohamed Amine Hamrouni\nPour toute question ou collaboration\n\n\n\n\n\n\n💡 Questions ?\n\n\nN’hésitez pas à poser vos questions"
+  }
+]

@@ -1,0 +1,581 @@
+---
+title: "Analyse des données de circoncision"
+subtitle: "Étude descriptive et exploratoire"
+author: "Raed Mohamed Amine Hamrouni"
+date: today
+format:
+  revealjs:
+    theme: sky
+    transition: slide
+    slide-number: true
+    preview-links: auto
+    footer: "Analyse circoncision - 2025"
+    incremental: false
+    embed-resources: true
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(forcats)
+library(knitr)
+
+# Charger les données
+data <- read.csv(
+  "liste_circoncision_anonymisee.csv",
+  sep = ",",
+  dec = ".",
+  stringsAsFactors = FALSE
+)
+
+# Nettoyer les données
+data <- data %>%
+  mutate(
+    Date = dmy(Date),
+    annee = year(Date),
+    age_jours = as.numeric(`age.en.jours`),
+    age_mois = as.numeric(`age.en.mois`),
+    age_annee = as.numeric(`age.en.année`),
+    operateur = `Opérateur`,
+    contexte = Contexte,
+    anesthesie = `Anesthésie`,
+    indication = `Indication.de.la.circoncision`
+  )
+```
+
+## Plan de la présentation {.smaller}
+
+::: {.incremental}
+1. **Introduction et objectifs**
+2. **Vue d'ensemble des données**
+3. **Caractéristiques de la population**
+4. **Évolution temporelle**
+5. **Analyse des opérateurs**
+6. **Contexte et anesthésie**
+7. **Indications médicales**
+8. **Analyses croisées**
+9. **Conclusions et perspectives**
+:::
+
+# Introduction {background-color="#4a90e2"}
+
+## Contexte de l'étude
+
+:::: {.columns}
+::: {.column width="50%"}
+### Problématique
+- Intervention chirurgicale courante
+- Motivations diverses (médicales, culturelles)
+- Besoin d'analyse des pratiques
+
+:::
+
+::: {.column width="50%"}
+### Approche
+- Analyse descriptive complète
+- Exploration des tendances
+- Identification des patterns
+:::
+::::
+
+## Objectifs de l'analyse
+
+::: {.incremental}
+- 📊 **Décrire la population** : âge, période d'intervention
+- 👨‍⚕️ **Analyser les pratiques** : opérateurs, contextes, anesthésie
+- 🏥 **Examiner les indications** : raisons médicales et autres
+- 📈 **Explorer les tendances** : évolution temporelle
+- 🔍 **Identifier les facteurs** : relations entre variables
+:::
+
+## Méthodologie
+
+:::: {.columns}
+::: {.column width="60%"}
+### Outils et packages R
+
+- `dplyr` : manipulation de données
+- `ggplot2` : visualisations
+- `lubridate` : gestion des dates
+- `forcats` : variables catégorielles
+
+:::
+
+::: {.column width="40%"}
+### Approche analytique
+
+- Statistiques descriptives
+- Visualisations graphiques
+- Analyses croisées
+- Interprétation contextuelle
+:::
+::::
+
+# Vue d'ensemble {background-color="#16a085"}
+
+## Aperçu du jeu de données
+
+```{r}
+#| echo: true
+head(data, 3) %>% 
+  select(1:6) %>%
+  kable()
+```
+
+::: {.callout-note}
+Données anonymisées contenant des informations sur l'âge, l'opérateur, le contexte, l'anesthésie et les indications
+:::
+
+## Statistiques globales {.smaller}
+
+:::: {.columns}
+::: {.column width="50%"}
+### Volume et période
+
+```{r}
+cat(paste("📊 Nombre total d'interventions:", nrow(data), "\n"))
+cat(paste("📅 Période:", min(data$annee, na.rm=TRUE), "-", max(data$annee, na.rm=TRUE), "\n"))
+cat(paste("⏱️ Durée:", max(data$annee, na.rm=TRUE) - min(data$annee, na.rm=TRUE), "ans"))
+```
+
+:::
+
+::: {.column width="50%"}
+### Âge des patients
+
+```{r}
+data %>%
+  summarise(
+    `Médiane (mois)` = round(median(age_mois, na.rm = TRUE), 1),
+    `Moyenne (mois)` = round(mean(age_mois, na.rm = TRUE), 1),
+    `Q1 (mois)` = round(quantile(age_mois, 0.25, na.rm = TRUE), 1),
+    `Q3 (mois)` = round(quantile(age_mois, 0.75, na.rm = TRUE), 1)
+  ) %>%
+  kable()
+```
+:::
+::::
+
+# Population {background-color="#e74c3c"}
+
+## Distribution de l'âge
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5
+ggplot(data, aes(x = age_mois)) +
+  geom_histogram(bins = 30, fill = "#e74c3c", color = "white", alpha = 0.8) +
+  geom_vline(aes(xintercept = median(age_mois, na.rm = TRUE)), 
+             color = "#2c3e50", linetype = "dashed", size = 1.2) +
+  annotate("text", x = median(data$age_mois, na.rm = TRUE) + 15, 
+           y = Inf, label = paste("Médiane:", round(median(data$age_mois, na.rm = TRUE), 1), "mois"), 
+           vjust = 2, color = "#2c3e50", size = 5) +
+  labs(title = "Distribution de l'âge au moment de l'intervention", 
+       x = "Âge (mois)", y = "Fréquence") +
+  theme_minimal(base_size = 14)
+```
+
+## Interprétation de l'âge
+
+::: {.incremental}
+- 🍼 **Concentration précoce** : majorité des interventions dans les premiers mois
+- 📊 **Distribution asymétrique** : queue étendue vers les âges plus avancés
+- 👶 **Pratique néonatale** : pic observable dans la petite enfance
+- 🏥 **Indications variées** : interventions tardives pour raisons médicales spécifiques
+:::
+
+::: {.callout-tip}
+## Point clé
+L'âge médian de **`r round(median(data$age_mois, na.rm=TRUE), 1)` mois** confirme une pratique principalement pédiatrique précoce
+:::
+
+# Évolution temporelle {background-color="#9b59b6"}
+
+## Tendance annuelle
+
+```{r}
+#| fig-width: 11
+#| fig-height: 6
+cas_par_annee <- data %>%
+  group_by(annee) %>%
+  summarise(n = n())
+
+# Calculer les limites pour l'axe Y
+max_cas <- max(cas_par_annee$n, na.rm = TRUE)
+y_limit <- ceiling(max_cas / 500) * 500  # Arrondir au 500 supérieur
+
+ggplot(cas_par_annee, aes(x = annee, y = n)) +
+  geom_line(color = "#9b59b6", size = 2, alpha = 0.8) +
+  geom_point(color = "#6c3483", size = 5) +
+  geom_area(alpha = 0.2, fill = "#9b59b6") +
+  geom_text(aes(label = n), vjust = -1, size = 4.5, fontface = "bold", color = "#2c3e50") +
+  geom_smooth(method = "loess", se = TRUE, color = "#e74c3c", 
+              linetype = "dashed", alpha = 0.2, size = 1) +
+  scale_y_continuous(limits = c(0, y_limit),
+                     breaks = seq(0, y_limit, by = ifelse(y_limit <= 100, 20, 
+                                                           ifelse(y_limit <= 500, 100, 500)))) +
+  labs(title = "Évolution du nombre d'interventions par année", 
+       x = "Année", y = "Nombre de cas") +
+  theme_minimal(base_size = 15) +
+  theme(
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank(),
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    axis.title = element_text(face = "bold"),
+    panel.background = element_rect(fill = "white", color = NA)
+  )
+```
+
+## Analyse de la tendance
+
+:::: {.columns}
+::: {.column width="50%"}
+### Observations
+
+- Variations inter-annuelles
+- Tendance globale (courbe lissée)
+- Pics et creux identifiables
+
+:::
+
+::: {.column width="50%"}
+### Facteurs possibles
+
+- Changements démographiques
+- Évolution des pratiques
+- Modifications organisationnelles
+- Facteurs socio-culturels
+:::
+::::
+
+# Opérateurs {background-color="#27ae60"}
+
+## Répartition par opérateur (Top 10)
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5
+top_10_operateurs <- data %>%
+  count(operateur, sort = TRUE) %>%
+  head(10)
+
+data %>%
+  filter(operateur %in% top_10_operateurs$operateur) %>%
+  ggplot(aes(x = fct_reorder(operateur, operateur, .fun = length))) +
+  geom_bar(fill = "#27ae60", alpha = 0.8) +
+  coord_flip() +
+  labs(title = "Top 10 des opérateurs", 
+       x = NULL, y = "Nombre d'interventions") +
+  theme_minimal(base_size = 14) +
+  theme(axis.text.y = element_text(size = 12))
+```
+
+## Concentration de l'activité
+
+```{r}
+concentration <- data %>%
+  count(operateur, sort = TRUE) %>%
+  mutate(
+    pourcentage = round(100 * n / sum(n), 1),
+    pourcentage_cumul = cumsum(pourcentage)
+  )
+
+top_5_pct <- concentration %>% head(5) %>% pull(pourcentage) %>% sum()
+```
+
+::: {.incremental}
+- 📊 **Top 5 opérateurs** : `r round(top_5_pct, 1)`% des interventions
+- 🎯 **Spécialisation** : concentration chez quelques praticiens
+- 💡 **Expérience** : importance du volume pour l'expertise
+- 🏥 **Organisation** : répartition inégale de l'activité
+:::
+
+::: {.callout-important}
+Principe de Pareto observé : une minorité d'opérateurs réalise la majorité des interventions
+:::
+
+# Contexte & Anesthésie {background-color="#f39c12"}
+
+## Contexte d'intervention
+
+```{r}
+#| fig-width: 10
+#| fig-height: 4.5
+ggplot(data, aes(x = fct_infreq(contexte))) +
+  geom_bar(fill = "#f39c12", alpha = 0.8) +
+  geom_text(stat = "count", aes(label = after_stat(count)), vjust = -0.5, size = 5) +
+  labs(title = "Répartition selon le contexte", 
+       x = NULL, y = "Nombre d'interventions") +
+  theme_minimal(base_size = 14) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+```
+
+## Types d'anesthésie
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5
+ggplot(data, aes(x = fct_infreq(anesthesie))) +
+  geom_bar(fill = "#3498db", alpha = 0.8) +
+  geom_text(stat = "count", aes(label = after_stat(count)), vjust = -0.5, size = 4.5) +
+  labs(title = "Types d'anesthésie utilisés", 
+       x = NULL, y = "Nombre d'interventions") +
+  theme_minimal(base_size = 14) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+```
+
+## Considérations cliniques
+
+:::: {.columns}
+::: {.column width="50%"}
+### Contexte
+
+- Hospitalier vs ambulatoire
+- Impact sur le suivi
+- Ressources disponibles
+- Organisation des soins
+
+:::
+
+::: {.column width="50%"}
+### Anesthésie
+
+- Adaptation selon l'âge
+- Locale vs générale
+- Sécurité du patient
+- Protocoles établis
+:::
+::::
+
+# Indications {background-color="#e67e22"}
+
+## Top 10 des indications
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5.5
+top_indications <- data %>%
+  count(indication, sort = TRUE) %>%
+  head(10)
+
+data %>%
+  filter(indication %in% top_indications$indication) %>%
+  ggplot(aes(x = fct_reorder(indication, indication, .fun = length))) +
+  geom_bar(fill = "#e67e22", alpha = 0.8) +
+  coord_flip() +
+  labs(title = "Principales indications de circoncision", 
+       x = NULL, y = "Nombre d'interventions") +
+  theme_minimal(base_size = 13) +
+  theme(axis.text.y = element_text(size = 11))
+```
+
+## Catégories d'indications
+
+::: {.incremental}
+- 🏥 **Médicales** : phimosis, infections récurrentes, balanite
+- 🕌 **Culturelles/religieuses** : pratiques traditionnelles
+- 🛡️ **Préventives** : hygiène, prévention des infections
+- 👤 **Autres** : convenance personnelle, esthétiques
+:::
+
+::: {.callout-note}
+## Diversité
+La variété des indications reflète une approche individualisée et multifactorielle
+:::
+
+# Analyses croisées {background-color="#1abc9c"}
+
+## Âge selon le contexte
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5
+data %>%
+  filter(!is.na(contexte) & !is.na(age_mois)) %>%
+  ggplot(aes(x = contexte, y = age_mois, fill = contexte)) +
+  geom_boxplot(alpha = 0.7, outlier.alpha = 0.5) +
+  labs(title = "Distribution de l'âge selon le contexte d'intervention", 
+       x = NULL, y = "Âge (mois)") +
+  theme_minimal(base_size = 14) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1),
+        legend.position = "none") +
+  scale_fill_brewer(palette = "Set2")
+```
+
+## Insights des analyses croisées
+
+:::: {.columns}
+::: {.column width="50%"}
+### Observations
+
+- Variations d'âge selon contexte
+- Médianes différentes
+- Outliers identifiables
+- Pratiques spécifiques
+
+:::
+
+::: {.column width="50%"}
+### Implications
+
+- Adaptation des protocoles
+- Sélection des patients
+- Organisation des parcours
+- Personnalisation des soins
+:::
+::::
+
+# Conclusions {background-color="#34495e"}
+
+## Synthèse des résultats {.smaller}
+
+:::: {.columns}
+::: {.column width="50%"}
+### Données globales
+✅ **`r nrow(data)` interventions** analysées  
+✅ Période: **`r min(data$annee, na.rm=TRUE)`-`r max(data$annee, na.rm=TRUE)`**  
+✅ Âge médian: **`r round(median(data$age_mois, na.rm=TRUE), 1)` mois**
+
+### Population
+- Pratique pédiatrique précoce
+- Distribution asymétrique
+- Variabilité notable
+:::
+
+::: {.column width="50%"}
+### Pratiques
+- Concentration chez certains opérateurs
+- Diversité des contextes
+- Adaptation de l'anesthésie
+- Indications variées
+:::
+::::
+
+## Points clés
+
+::: {.incremental}
+1. 🎯 **Spécialisation** : expertise concentrée chez quelques praticiens
+2. 📊 **Timing optimal** : majorité des interventions précoces
+3. 🏥 **Organisation** : adaptation du contexte aux besoins
+4. 💊 **Protocoles** : anesthésie ajustée selon l'âge
+5. 📈 **Tendances** : stabilité relative avec variations annuelles
+:::
+
+## Limites de l'étude
+
+::: {.callout-warning}
+### À considérer
+
+- Nature descriptive uniquement
+- Données manquantes possibles
+- Absence de suivi post-opératoire
+- Généralisation limitée au contexte local
+:::
+
+## Perspectives futures {.smaller}
+
+:::: {.columns}
+::: {.column width="50%"}
+### Analyses avancées
+
+- 🤖 **Modélisation prédictive**
+- 📊 **Analyse des complications**
+- 🔄 **Séries temporelles**
+- 📈 **Benchmarking**
+
+:::
+
+::: {.column width="50%"}
+### Améliorations
+
+- 📝 **Standardisation** des données
+- 🏥 **Suivi post-opératoire**
+- 📋 **Documentation** complète
+- 👥 **Satisfaction** patients
+:::
+::::
+
+## Recommandations pratiques
+
+::: {.incremental}
+- 📚 **Formation continue** : maintien de l'expertise
+- 📊 **Audit régulier** : amélioration de la qualité
+- 🤝 **Collaboration** : partage des bonnes pratiques
+- 💻 **Digitalisation** : collecte systématique des données
+- 🎯 **Protocoles** : harmonisation des pratiques
+:::
+
+## Impact et valorisation
+
+:::: {.columns}
+::: {.column width="50%"}
+### Pour les cliniciens
+
+- Guide des pratiques
+- Référentiel d'activité
+- Base pour l'amélioration
+- Support de formation
+
+:::
+
+::: {.column width="50%"}
+### Pour la santé publique
+
+- Planification des ressources
+- Évaluation de l'offre
+- Politique de santé
+- Recherche clinique
+:::
+::::
+
+# Conclusion finale {background-color="#2c3e50"}
+
+## Message principal
+
+::: {.callout-tip icon=false}
+## 🎯 En résumé
+
+Cette analyse révèle une **pratique bien établie et organisée**, caractérisée par :
+
+- Une intervention principalement **pédiatrique précoce**
+- Une **expertise concentrée** chez des praticiens expérimentés
+- Une **adaptation** aux besoins individuels (contexte, anesthésie, indications)
+- Une base solide pour l'**amélioration continue** de la qualité des soins
+:::
+
+## Prochaines étapes
+
+::: {.incremental}
+1. 📊 Approfondissement des analyses statistiques
+2. 🔬 Études analytiques sur les facteurs de risque
+3. 📈 Développement de modèles prédictifs
+4. 🤝 Comparaisons multicentriques
+5. 📚 Publication des résultats
+:::
+
+## Merci de votre attention ! {.center}
+
+::: {.callout-note icon=false}
+## 📧 Contact
+
+**Raed Mohamed Amine Hamrouni**
+
+Pour toute question ou collaboration
+:::
+
+::: {.callout-tip icon=false}
+## 💡 Questions ?
+
+N'hésitez pas à poser vos questions
+:::
+
+---
+
+### 📊 Fin de la présentation
+
+*Analyse réalisée avec R, ggplot2, et Quarto*

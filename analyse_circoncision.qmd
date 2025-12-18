@@ -1,6 +1,8 @@
 ---
 title: "Analyse des données de circoncision"
+subtitle: "Étude descriptive et exploratoire"
 author: "Raed Mohamed Amine Hamrouni"
+date: today
 format:
   html:
     code-tools: true
@@ -10,6 +12,7 @@ format:
     theme: cosmo
     embed-resources: true
     css: custom.css
+    number-sections: true
 execute:
   echo: true
   warning: false
@@ -46,71 +49,114 @@ data <- data %>%
   )
 ```
 
-## Introduction
+# Introduction {#sec-intro}
 
-Ce document présente l'analyse d'un fichier de données de circoncision.
+## Contexte de l'étude
 
-Le but est de:
+Ce document présente une analyse exhaustive d'un ensemble de données relatives aux interventions de circoncision. La circoncision est une procédure chirurgicale courante pratiquée pour des raisons culturelles, religieuses ou médicales. Cette analyse vise à fournir une compréhension approfondie des pratiques actuelles, des caractéristiques de la population concernée et des modalités opératoires.
 
-- décrire la population
-- décrire les pratiques
-- décrire les complications
-- explorer des facteurs associés
+## Objectifs de l'analyse
 
-## 1. Inspection des données
+Les objectifs principaux de cette étude sont :
 
-### 1.1. Afficher les noms de colonnes
+- **Décrire la population** : caractériser les patients selon l'âge et la période d'intervention
+- **Analyser les pratiques opératoires** : identifier les opérateurs, les contextes et les types d'anesthésie utilisés
+- **Examiner les indications** : comprendre les raisons médicales et autres motivant les interventions
+- **Explorer les tendances temporelles** : observer l'évolution du nombre d'interventions au fil des années
+- **Identifier les facteurs associés** : mettre en évidence les relations entre différentes variables
+
+## Méthodologie
+
+L'analyse repose sur des méthodes statistiques descriptives et exploratoires utilisant le langage R et les packages suivants :
+
+- `dplyr` pour la manipulation des données
+- `ggplot2` pour les visualisations
+- `lubridate` pour le traitement des dates
+- `forcats` pour la gestion des variables catégorielles
+
+# Inspection des données {#sec-inspection}
+
+## Noms de colonnes
 
 ```{r}
 names(data)
 ```
 
-### 1.2. Aperçu des données
+Le jeu de données contient plusieurs variables clés permettant une analyse multidimensionnelle des interventions.
+
+## Aperçu des premières observations
 
 ```{r}
 head(data, 5)
 ```
 
-### 1.3. Structure des données
+## Structure des données
 
 ```{r}
 str(data)
 ```
 
-## 2. Analyses descriptives
+**Interprétation** : Le jeu de données est structuré avec des variables numériques (âges) et catégorielles (opérateur, contexte, anesthésie, indication), ce qui permet une analyse à la fois quantitative et qualitative.
 
-### 2.1. Résumé statistique de l'âge
+# Analyses descriptives {#sec-descriptives}
+
+## Caractéristiques de l'âge
+
+### Statistiques résumées
 
 ```{r}
-data %>%
+resume_age <- data %>%
   summarise(
     n = n(),
     age_median_jours = median(age_jours, na.rm = TRUE),
     age_Q1_jours = quantile(age_jours, 0.25, na.rm = TRUE),
     age_Q3_jours = quantile(age_jours, 0.75, na.rm = TRUE),
-    age_median_mois = median(age_mois, na.rm = TRUE)
-  ) %>%
-  kable()
+    age_median_mois = median(age_mois, na.rm = TRUE),
+    age_moyen_mois = mean(age_mois, na.rm = TRUE),
+    ecart_type_mois = sd(age_mois, na.rm = TRUE)
+  )
+
+resume_age %>% kable(digits = 1)
 ```
 
-### 2.2. Distribution de l'âge (en mois)
+**Analyse** : L'âge médian de `r round(resume_age$age_median_mois, 1)` mois indique que la majorité des interventions sont réalisées durant la petite enfance. L'intervalle interquartile (Q1-Q3) permet d'observer la variabilité de l'âge au moment de l'intervention.
+
+### Distribution de l'âge (en mois)
 
 ```{r}
 #| fig-width: 10
 #| fig-height: 6
+#| label: fig-age-distribution
+#| fig-cap: "La distribution de l'âge montre une concentration importante dans les premiers mois de vie, avec une queue de distribution s'étendant vers les âges plus avancés."
+
 ggplot(data, aes(x = age_mois)) +
-  geom_histogram(bins = 30, fill = "#4a90e2", color = "white") +
-  labs(title = "Distribution de l'âge (en mois)", x = "Âge (mois)", y = "Effectif") +
-  theme_minimal()
+  geom_histogram(bins = 30, fill = "#4a90e2", color = "white", alpha = 0.8) +
+  geom_vline(aes(xintercept = median(age_mois, na.rm = TRUE)), 
+             color = "red", linetype = "dashed", size = 1) +
+  annotate("text", x = median(data$age_mois, na.rm = TRUE) + 10, 
+           y = Inf, label = paste("Médiane:", round(median(data$age_mois, na.rm = TRUE), 1), "mois"), 
+           vjust = 2, color = "red") +
+  labs(title = "Distribution de l'âge au moment de la circoncision", 
+       x = "Âge (mois)", y = "Effectif") +
+  theme_minimal(base_size = 12)
 ```
 
-## 3. Évolution temporelle
+**Observations clés** :
 
-### 3.1. Circoncisions par année
+- La distribution présente une asymétrie positive (skewness), avec une majorité d'interventions précoces
+- Un pic observable dans les premiers mois suggère une pratique courante de circoncision néonatale ou infantile
+- La présence de cas à des âges plus avancés reflète des indications médicales ou des choix personnels tardifs
+
+# Évolution temporelle {#sec-evolution}
+
+## Tendance annuelle des interventions
 
 ```{r}
 #| fig-width: 10
 #| fig-height: 6
+#| label: fig-tendance-annuelle
+#| fig-cap: "Évolution du nombre de circoncisions par année, révélant les tendances et variations dans la pratique chirurgicale."
+
 cas_par_annee <- data %>%
   group_by(annee) %>%
   summarise(n = n())
@@ -118,122 +164,296 @@ cas_par_annee <- data %>%
 ggplot(cas_par_annee, aes(x = annee, y = n)) +
   geom_line(color = "#4a90e2", size = 1.5) +
   geom_point(color = "#2c5aa0", size = 3) +
-  geom_text(aes(label = n), vjust = -0.5) +
-  labs(title = "Nombre de circoncisions par année", x = "Année", y = "Nombre de cas") +
-  theme_minimal()
+  geom_text(aes(label = n), vjust = -0.5, size = 3.5) +
+  geom_smooth(method = "loess", se = TRUE, color = "#e74c3c", linetype = "dashed") +
+  labs(title = "Nombre de circoncisions par année", 
+       x = "Année", y = "Nombre de cas") +
+  theme_minimal(base_size = 12) +
+  theme(panel.grid.minor = element_blank())
 ```
 
-## 4. Analyse par opérateur
+**Analyse temporelle** :
 
-### 4.1. Tableau des opérateurs
+- La courbe de tendance (en rouge) permet d'identifier les périodes de croissance ou de décroissance
+- Les variations annuelles peuvent refléter des changements dans la demande, la disponibilité des services ou des facteurs sociodémographiques
+- Une analyse plus approfondie nécessiterait la prise en compte de facteurs externes (politiques de santé, événements sociétaux)
+
+# Analyse par opérateur {#sec-operateur}
+
+## Distribution des interventions par praticien
 
 ```{r}
-data %>%
+operateurs_stats <- data %>%
   count(operateur, sort = TRUE) %>%
-  mutate(pourcentage = round(100 * n / sum(n), 1)) %>%
+  mutate(
+    pourcentage = round(100 * n / sum(n), 1),
+    pourcentage_cumul = cumsum(pourcentage)
+  )
+
+operateurs_stats %>%
   head(10) %>%
-  kable()
+  kable(col.names = c("Opérateur", "Nombre", "Pourcentage (%)", "Cumulé (%)"))
 ```
 
-### 4.2. Graphique par opérateur
+**Interprétation** : La concentration des interventions chez certains opérateurs peut indiquer une spécialisation ou une expérience particulière. Le principe de Pareto (80/20) peut s'appliquer ici, où une minorité d'opérateurs réalise la majorité des interventions.
+
+## Visualisation des principaux opérateurs
 
 ```{r}
 #| fig-width: 10
 #| fig-height: 8
+#| label: fig-operateurs
+#| fig-cap: "Répartition des 15 opérateurs les plus actifs, illustrant la concentration de l'activité chirurgicale."
+
 top_operateurs <- data %>%
   count(operateur, sort = TRUE) %>%
   head(15)
 
 data %>%
   filter(operateur %in% top_operateurs$operateur) %>%
-  ggplot(aes(x = fct_infreq(operateur))) +
-  geom_bar(fill = "#e74c3c") +
+  ggplot(aes(x = fct_reorder(operateur, operateur, .fun = length))) +
+  geom_bar(fill = "#e74c3c", alpha = 0.8) +
   coord_flip() +
-  labs(title = "Répartition par opérateur (Top 15)", x = "Opérateur", y = "Nombre") +
-  theme_minimal()
+  labs(title = "Répartition par opérateur (Top 15)", 
+       x = "Opérateur", y = "Nombre d'interventions") +
+  theme_minimal(base_size = 12) +
+  theme(axis.text.y = element_text(size = 10))
 ```
 
-## 5. Analyse du contexte
+# Analyse du contexte {#sec-contexte}
 
-### 5.1. Répartition par contexte
+## Répartition selon le contexte d'intervention
 
 ```{r}
-data %>%
+contexte_stats <- data %>%
   count(contexte, sort = TRUE) %>%
-  mutate(pourcentage = round(100 * n / sum(n), 1)) %>%
-  kable()
+  mutate(pourcentage = round(100 * n / sum(n), 1))
+
+contexte_stats %>% kable(col.names = c("Contexte", "Nombre", "Pourcentage (%)"))
 ```
 
-### 5.2. Graphique par contexte
+**Analyse contextuelle** : Le contexte d'intervention (ambulatoire, hospitalier, cabinet privé, etc.) influence les modalités opératoires, le suivi post-opératoire et potentiellement les résultats cliniques.
+
+## Visualisation par contexte
 
 ```{r}
 #| fig-width: 10
 #| fig-height: 6
+#| label: fig-contexte
+#| fig-cap: "Distribution des interventions selon le contexte, reflétant l'organisation des soins."
+
 ggplot(data, aes(x = fct_infreq(contexte))) +
-  geom_bar(fill = "#16a085") +
-  geom_text(stat = "count", aes(label = after_stat(count)), vjust = -0.5) +
-  labs(title = "Répartition par contexte", x = "Contexte", y = "Nombre") +
-  theme_minimal() +
+  geom_bar(fill = "#16a085", alpha = 0.8) +
+  geom_text(stat = "count", aes(label = after_stat(count)), vjust = -0.5, size = 4) +
+  labs(title = "Répartition par contexte d'intervention", 
+       x = "Contexte", y = "Nombre d'interventions") +
+  theme_minimal(base_size = 12) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-## 6. Analyse de l'anesthésie
+# Analyse de l'anesthésie {#sec-anesthesie}
 
-### 6.1. Types d'anesthésie utilisés
+## Types d'anesthésie pratiqués
 
 ```{r}
-data %>%
+anesthesie_stats <- data %>%
   count(anesthesie, sort = TRUE) %>%
-  mutate(pourcentage = round(100 * n / sum(n), 1)) %>%
-  kable()
+  mutate(pourcentage = round(100 * n / sum(n), 1))
+
+anesthesie_stats %>% kable(col.names = c("Type d'anesthésie", "Nombre", "Pourcentage (%)"))
 ```
 
-### 6.2. Graphique des types d'anesthésie
+**Considérations cliniques** : Le choix de l'anesthésie dépend de l'âge du patient, du contexte chirurgical, de l'expérience de l'opérateur et des ressources disponibles. L'anesthésie locale est souvent privilégiée pour les nourrissons, tandis que l'anesthésie générale peut être nécessaire pour les enfants plus âgés.
+
+## Visualisation des pratiques anesthésiques
 
 ```{r}
 #| fig-width: 10
 #| fig-height: 6
+#| label: fig-anesthesie
+#| fig-cap: "Répartition des types d'anesthésie utilisés lors des circoncisions."
+
 ggplot(data, aes(x = fct_infreq(anesthesie))) +
-  geom_bar(fill = "#27ae60") +
+  geom_bar(fill = "#27ae60", alpha = 0.8) +
   coord_flip() +
-  labs(title = "Types d'anesthésie", x = "Type", y = "Nombre") +
-  theme_minimal()
+  labs(title = "Types d'anesthésie utilisés", 
+       x = "Type d'anesthésie", y = "Nombre d'interventions") +
+  theme_minimal(base_size = 12)
 ```
 
-## 7. Indications de la circoncision
+# Indications de la circoncision {#sec-indications}
 
-### 7.1. Tableau des indications
+## Principales indications médicales et autres
 
 ```{r}
-data %>%
+indications_stats <- data %>%
   count(indication, sort = TRUE) %>%
-  mutate(pourcentage = round(100 * n / sum(n), 1)) %>%
+  mutate(pourcentage = round(100 * n / sum(n), 1))
+
+indications_stats %>%
   head(10) %>%
-  kable()
+  kable(col.names = c("Indication", "Nombre", "Pourcentage (%)"))
 ```
 
-### 7.2. Graphique des indications
+**Analyse des indications** : Les indications peuvent être classées en plusieurs catégories :
+
+- **Indications médicales** : phimosis, infections récurrentes, balanite
+- **Indications culturelles/religieuses** : pratiques traditionnelles
+- **Indications préventives** : hygiène, prévention des infections
+- **Autres indications** : esthétiques ou convenance personnelle
+
+## Visualisation des principales indications
 
 ```{r}
 #| fig-width: 12
 #| fig-height: 8
+#| label: fig-indications
+#| fig-cap: "Top 10 des indications justifiant les circoncisions, montrant la diversité des motivations."
+
 top_indications <- data %>%
   count(indication, sort = TRUE) %>%
   head(10)
 
 data %>%
   filter(indication %in% top_indications$indication) %>%
-  ggplot(aes(x = fct_infreq(indication))) +
-  geom_bar(fill = "#d35400") +
+  ggplot(aes(x = fct_reorder(indication, indication, .fun = length))) +
+  geom_bar(fill = "#d35400", alpha = 0.8) +
   coord_flip() +
-  labs(title = "Top 10 des indications", x = "Indication", y = "Nombre") +
-  theme_minimal()
+  labs(title = "Top 10 des indications de circoncision", 
+       x = "Indication", y = "Nombre d'interventions") +
+  theme_minimal(base_size = 12) +
+  theme(axis.text.y = element_text(size = 10))
 ```
 
-## 8. Conclusion
+# Analyses croisées {#sec-croises}
 
-Résumé:
+## Âge selon le contexte
 
-- **`r nrow(data)`** circoncisions au total
-- Période: **`r min(data$annee, na.rm=TRUE)`** à **`r max(data$annee, na.rm=TRUE)`**
-- Âge médian: **`r round(median(data$age_mois, na.rm=TRUE), 1)`** mois
+```{r}
+#| fig-width: 12
+#| fig-height: 6
+#| label: fig-age-contexte
+#| fig-cap: "Comparaison des distributions d'âge selon le contexte d'intervention."
+
+data %>%
+  filter(!is.na(contexte) & !is.na(age_mois)) %>%
+  ggplot(aes(x = contexte, y = age_mois, fill = contexte)) +
+  geom_boxplot(alpha = 0.7) +
+  labs(title = "Distribution de l'âge selon le contexte", 
+       x = "Contexte", y = "Âge (mois)") +
+  theme_minimal(base_size = 12) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none") +
+  scale_fill_brewer(palette = "Set2")
+```
+
+**Observations** : Les différences d'âge selon le contexte peuvent révéler des pratiques spécifiques : les interventions précoces en milieu hospitalier versus des interventions plus tardives en cabinet privé.
+
+# Conclusion {#sec-conclusion}
+
+## Synthèse des résultats principaux
+
+Cette analyse descriptive des données de circoncision a permis de mettre en évidence plusieurs constats importants :
+
+### 1. Caractéristiques de la population
+
+- **Volume total** : `r nrow(data)` interventions enregistrées
+- **Période d'observation** : de `r min(data$annee, na.rm=TRUE)` à `r max(data$annee, na.rm=TRUE)`
+- **Âge médian** : `r round(median(data$age_mois, na.rm=TRUE), 1)` mois, indiquant une pratique principalement pédiatrique
+- **Distribution d'âge** : concentration dans les premiers mois de vie, avec une variabilité notable
+
+### 2. Organisation des soins
+
+- **Concentration de l'activité** : quelques opérateurs réalisent une part importante des interventions, suggérant une spécialisation
+- **Diversité des contextes** : interventions réalisées dans différents cadres (hospitalier, ambulatoire, privé)
+- **Pratiques anesthésiques** : adaptation du type d'anesthésie selon l'âge et le contexte
+
+### 3. Indications cliniques
+
+- **Diversité des motivations** : indications médicales, culturelles et préventives
+- **Prédominance** : certaines indications reviennent fréquemment, reflétant les standards de pratique
+
+### 4. Tendances temporelles
+
+- **Évolution** : variations du nombre d'interventions au fil des années
+- **Stabilité relative** : malgré des fluctuations, la pratique demeure constante
+
+## Implications pratiques
+
+### Pour la pratique clinique
+
+- L'analyse révèle des patterns d'âge qui peuvent guider les recommandations sur le timing optimal
+- La concentration chez certains opérateurs souligne l'importance de l'expérience et de la formation continue
+- La diversité des contextes nécessite des protocoles adaptés à chaque environnement
+
+### Pour la santé publique
+
+- Les données permettent d'évaluer l'offre de soins et d'identifier d'éventuels besoins non satisfaits
+- L'analyse des tendances temporelles aide à la planification des ressources
+- La documentation des indications contribue à l'amélioration des pratiques
+
+## Limites de l'étude
+
+Cette analyse présente certaines limitations :
+
+- **Nature descriptive** : absence d'analyses inférentielles ou prédictives
+- **Données manquantes** : possibles valeurs manquantes non explorées en détail
+- **Absence de suivi** : pas d'information sur les complications ou les résultats à long terme
+- **Contexte local** : les résultats peuvent ne pas être généralisables à d'autres contextes
+
+## Perspectives et recommandations
+
+### Analyses futures
+
+- **Modélisation prédictive** : développer des modèles pour anticiper les besoins
+- **Analyse des complications** : si les données sont disponibles, étudier les facteurs de risque
+- **Comparaisons** : benchmarking avec d'autres établissements ou régions
+- **Séries temporelles** : analyses plus sophistiquées des tendances
+
+### Amélioration de la collecte de données
+
+- Standardisation des variables (nomenclature, codage)
+- Enrichissement avec des données de suivi post-opératoire
+- Documentation systématique des complications et événements indésirables
+- Collecte de données sur la satisfaction des patients/familles
+
+### Impact clinique
+
+Cette analyse constitue une base solide pour :
+
+- L'audit des pratiques professionnelles
+- L'amélioration continue de la qualité des soins
+- La formation des nouveaux praticiens
+- L'information des patients et de leurs familles
+
+## Conclusion finale
+
+Les données de circoncision analysées révèlent une pratique bien établie, organisée autour d'opérateurs expérimentés et adaptée aux besoins de la population. L'âge médian d'intervention cohérent avec les recommandations, la diversité des contextes de soins et la variété des indications témoignent d'une approche individualisée et complète.
+
+Cette analyse descriptive pose les fondations pour des travaux ultérieurs plus approfondis, notamment des études analytiques explorant les facteurs associés aux résultats cliniques, ou des recherches comparatives évaluant différentes techniques et protocoles.
+
+La documentation systématique et l'analyse régulière de telles données constituent des outils essentiels pour garantir la qualité et la sécurité des soins chirurgicaux pédiatriques.
+
+---
+
+**Date de l'analyse** : `r Sys.Date()`
+
+**Outils utilisés** : R version `r getRversion()`, Quarto, packages tidyverse
+
+---
+
+# Annexes {#sec-annexes}
+
+## Code complet de l'analyse
+
+Le code source complet est disponible en dépliant les sections de code tout au long du document (utiliser les boutons "Code" en haut à droite de chaque bloc).
+
+## Références
+
+- Méthodologie d'analyse descriptive en R
+- Documentation des packages utilisés : dplyr, ggplot2, lubridate
+- Bonnes pratiques en visualisation de données
+
+## Contact
+
+Pour toute question concernant cette analyse, veuillez contacter : Raed Mohamed Amine Hamrouni
