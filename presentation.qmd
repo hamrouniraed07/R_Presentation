@@ -205,29 +205,25 @@ cas_par_annee <- data %>%
   group_by(annee) %>%
   summarise(n = n())
 
-# Calculer les limites pour l'axe Y
-max_cas <- max(cas_par_annee$n, na.rm = TRUE)
-y_limit <- ceiling(max_cas / 500) * 500  # Arrondir au 500 supérieur
-
 ggplot(cas_par_annee, aes(x = annee, y = n)) +
-  geom_line(color = "#9b59b6", size = 2, alpha = 0.8) +
-  geom_point(color = "#6c3483", size = 5) +
-  geom_area(alpha = 0.2, fill = "#9b59b6") +
-  geom_text(aes(label = n), vjust = -1, size = 4.5, fontface = "bold", color = "#2c3e50") +
-  geom_smooth(method = "loess", se = TRUE, color = "#e74c3c", 
-              linetype = "dashed", alpha = 0.2, size = 1) +
-  scale_y_continuous(limits = c(0, y_limit),
-                     breaks = seq(0, y_limit, by = ifelse(y_limit <= 100, 20, 
-                                                           ifelse(y_limit <= 500, 100, 500)))) +
-  labs(title = "Évolution du nombre d'interventions par année", 
-       x = "Année", y = "Nombre de cas") +
-  theme_minimal(base_size = 15) +
+  geom_line(color = "#4a90e2", linewidth = 1.5) +
+  geom_point(color = "#2c5aa0", size = 3) +
+  geom_text(aes(label = n), vjust = -0.6, size = 3.5) +
+  geom_smooth(method = "loess", se = FALSE,
+              color = "#e74c3c", linetype = "dashed") +
+  scale_y_continuous(
+    limits = c(0, 50),        
+    breaks = seq(0, 50, 5)    
+  ) +
+  labs(
+    title = "Tendance annuelle des circoncisions",
+    x = "Année",
+    y = "Nombre de cas"
+  ) +
+  theme_minimal(base_size = 13) +
   theme(
     panel.grid.minor = element_blank(),
-    panel.grid.major.x = element_blank(),
-    plot.title = element_text(face = "bold", hjust = 0.5),
-    axis.title = element_text(face = "bold"),
-    panel.background = element_rect(fill = "white", color = NA)
+    plot.title = element_text(hjust = 0.5, face = "bold")
   )
 ```
 
