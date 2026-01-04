@@ -16,6 +16,7 @@ Ce projet vise à analyser un ensemble de données de circoncision pour :
 
 ```
 /home/raed/Desktop/polytech/R/Project/
+├── ProjetR.ipynb                     # Notebook Jupyter d'analyse
 ├── analyse_circoncision.qmd          # Document principal d'analyse (Quarto)
 ├── presentation.qmd                  # Présentation interactive RevealJS
 ├── _quarto.yml                       # Configuration du projet Quarto
@@ -48,6 +49,13 @@ Le projet utilise un fichier de données anonymisées (`liste_circoncision_anony
 ## Analyse réalisée
 
 Le projet comprend maintenant plusieurs formats de présentation :
+
+### 📓 Notebook Jupyter (ProjetR.ipynb)
+Un notebook Jupyter interactif offrant une approche complémentaire d'analyse :
+- **Exploration interactive** des données avec cellules de code exécutables
+- **Visualisations** avec les bibliothèques R (IRkernel)
+- **Documentation intégrée** directement avec le code
+- **Facilité de modification** pour tester de nouvelles analyses
 
 ### 📊 Rapport d'analyse interactif (HTML)
 Le rapport principal couvre :
@@ -99,6 +107,8 @@ Une présentation web complète avec :
 
 ### Analyse et traitement des données
 - **R** : Langage de programmation statistique
+- **Jupyter Notebook** : Environnement de notebook interactif
+- **IRkernel** : Noyau R pour Jupyter
 - **dplyr** : Manipulation de données
 - **ggplot2** : Visualisation de données avancée
 - **lubridate** : Manipulation des dates
@@ -122,8 +132,22 @@ Une présentation web complète avec :
 ### Prérequis
 - **R** (version 4.0 ou supérieure)
 - **Quarto** (système de publication)
+- **Jupyter Notebook** ou **JupyterLab**
+- **IRkernel** (noyau R pour Jupyter)
 - **Packages R** : dplyr, ggplot2, lubridate, forcats, knitr
 - **Navigateur web** moderne pour visualiser les résultats
+
+### Utilisation du Notebook Jupyter
+```bash
+# Installer IRkernel si nécessaire
+install.packages('IRkernel')
+IRkernel::installspec()
+
+# Lancer Jupyter Notebook
+jupyter notebook
+
+# Ouvrir ProjetR.ipynb dans le navigateur
+```
 
 ### Exécution locale
 
@@ -158,6 +182,12 @@ chmod +x build.sh
 ### Génération du projet
 
 Le projet Quarto peut être compilé pour générer :
+
+### 📓 Notebook Jupyter
+- **Format interactif** avec cellules de code R
+- **Exploration des données** en temps réel
+- **Visualisations** avec ggplot2
+- **Facilité de partage** et reproduction
 
 #### 📊 Rapport d'analyse interactif
 - **HTML interactif** avec navigation
